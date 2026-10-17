@@ -1,0 +1,3087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ICT LearningHub — Interactive ICT Education</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#040f22;
+    --navy:#071c3a;
+    --navy-panel:#0c2650;
+    --cyan:#00d4ff;
+    --cyan-dim:#0091c2;
+    --amber:#ffb84d;
+    --ink:#e8f3ff;
+    --ink-dim:#9fb6d6;
+    --card-bg:#0e2a52;
+    --radius:18px;
+  }
+  *{box-sizing:border-box; scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:"Inter",Arial,sans-serif;
+    background:var(--navy-deep);
+    color:var(--ink);
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{font-family:"Space Grotesk","Inter",sans-serif;}
+  ::selection{background:var(--cyan); color:#04101f;}
+
+  /* ---------- background circuitry ---------- */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(0,212,255,.14), transparent 40%),
+      radial-gradient(circle at 85% 75%, rgba(255,184,77,.08), transparent 45%),
+      linear-gradient(160deg, var(--navy-deep), var(--navy) 60%, var(--navy-deep));
+    z-index:-2;
+  }
+
+  /* ---------- nav ---------- */
+  nav{
+    background:rgba(4,15,34,.85);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(0,212,255,.18);
+    padding:12px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    position:sticky;
+    top:0;
+    z-index:200;
+    flex-wrap:wrap;
+  }
+  .nav-links{display:flex; flex-wrap:wrap; gap:6px; justify-content:center;}
+  nav button.nav-btn{
+    background:transparent;
+    color:var(--ink-dim);
+    border:1px solid transparent;
+    padding:9px 16px;
+    border-radius:30px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:.2px;
+    transition:.25s;
+    font-family:"Inter",sans-serif;
+  }
+  nav button.nav-btn:hover{
+    color:var(--navy-deep);
+    background:var(--cyan);
+    box-shadow:0 0 18px rgba(0,212,255,.5);
+  }
+  nav button.nav-btn.active{
+    background:var(--cyan);
+    color:var(--navy-deep);
+  }
+  .nav-brand{
+    display:flex; align-items:center; gap:8px;
+    color:var(--ink);
+    font-family:"JetBrains Mono",monospace;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:.5px;
+  }
+  .nav-brand .dot{width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 10px var(--cyan);}
+
+  #loginBtn, #userChip{
+    background:linear-gradient(135deg, var(--cyan), var(--cyan-dim));
+    color:#04101f;
+    border:none;
+    padding:9px 18px;
+    border-radius:30px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:14px;
+    transition:.25s;
+    white-space:nowrap;
+  }
+  #loginBtn:hover{transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,212,255,.4);}
+  #userChip{background:rgba(255,255,255,.08); color:var(--ink); border:1px solid rgba(0,212,255,.4);}
+  #userChip:hover{background:rgba(255,255,255,.15);}
+
+  /* ---------- hero (horizontal split layout + 3D + motion) ---------- */
+  :root{ --deepblue:#4d7cff; }
+  .hero{
+    position:relative;
+    min-height:600px;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    background:radial-gradient(ellipse at center, #0a2447 0%, #050e1f 75%);
+    padding:70px 20px 40px;
+  }
+  #heroCanvas{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    display:block;
+    opacity:.5;
+  }
+  .hero-grid-floor{
+    position:absolute;
+    left:-20%; right:-20%; bottom:-10%;
+    height:45%;
+    background-image:
+      linear-gradient(rgba(0,212,255,.22) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,.22) 1px, transparent 1px);
+    background-size:44px 44px;
+    transform:perspective(280px) rotateX(62deg);
+    transform-origin:bottom;
+    mask-image:linear-gradient(to top, black, transparent 85%);
+    -webkit-mask-image:linear-gradient(to top, black, transparent 85%);
+    animation:floorScroll 5s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes floorScroll{from{background-position:0 0;} to{background-position:0 44px;}}
+
+  .hero-inner{
+    position:relative; z-index:6;
+    width:100%;
+    max-width:1150px;
+    margin:0 auto;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:36px;
+  }
+  .hero-text{flex:1 1 340px; min-width:280px;}
+  .eyebrow-h{
+    display:block;
+    color:var(--cyan);
+    font-family:"JetBrains Mono",monospace;
+    font-size:13px;
+    letter-spacing:3px;
+    font-weight:700;
+    margin-bottom:14px;
+  }
+  .headline-h{margin:0 0 16px;}
+  .headline-h .line{
+    display:block;
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:700;
+    font-size:clamp(30px,6.5vw,52px);
+    line-height:1.08;
+  }
+  .headline-h .deepblue{color:var(--deepblue);}
+  .headline-h .accent{
+    color:var(--cyan);
+    text-shadow:0 0 22px rgba(0,212,255,.6);
+  }
+  .hero-desc{
+    color:var(--ink-dim);
+    font-size:16px;
+    line-height:1.7;
+    max-width:480px;
+    margin:0 0 26px;
+  }
+  .hero-ctas-h{display:flex; flex-wrap:wrap; gap:12px;}
+  .pill-cta{
+    border:none;
+    padding:14px 26px;
+    border-radius:30px;
+    font-weight:700;
+    cursor:pointer;
+    font-size:14px;
+    transition:.25s;
+    text-align:center;
+  }
+  .pill-cta.primary{
+    background:linear-gradient(135deg,var(--cyan),#00ffc8);
+    color:#04101f;
+    box-shadow:0 0 22px rgba(0,212,255,.55);
+    animation:pulseGlow 2.6s ease-in-out infinite;
+  }
+  .pill-cta.primary:hover{transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,212,255,.7);}
+  .pill-cta.ghost{background:rgba(255,255,255,.06); color:var(--ink); border:1px solid rgba(255,255,255,.25);}
+  .pill-cta.ghost:hover{background:rgba(255,255,255,.12); transform:translateY(-3px);}
+  @keyframes pulseGlow{
+    0%,100%{box-shadow:0 0 18px rgba(0,212,255,.5);}
+    50%{box-shadow:0 0 34px rgba(0,212,255,.85);}
+  }
+
+  .hero-code-panel{
+    position:relative;
+    flex:1 1 360px;
+    min-width:280px;
+    max-width:480px;
+    background:#050e1f;
+    border-radius:16px;
+    border:1px solid rgba(0,212,255,.3);
+    box-shadow:0 0 0 1px rgba(0,212,255,.08), 0 20px 50px rgba(0,10,30,.6);
+    overflow:hidden;
+  }
+  .hero-code-panel::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent, #28c840, var(--cyan), transparent);
+    background-size:200% 100%;
+    animation:scanline 2.8s linear infinite;
+  }
+  @keyframes scanline{from{background-position:200% 0;} to{background-position:-200% 0;}}
+  .code-topbar{
+    display:flex; align-items:center; gap:6px;
+    padding:10px 14px;
+    background:#081633;
+    border-bottom:1px solid rgba(0,212,255,.15);
+  }
+  .code-topbar .dot{width:10px; height:10px; border-radius:50%;}
+  .code-topbar .dot.red{background:#ff5f57;}
+  .code-topbar .dot.amber{background:#febc2e;}
+  .code-topbar .dot.green{background:#28c840;}
+  .code-filename{
+    margin-left:8px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;
+    color:var(--ink-dim);
+  }
+  .code-body{
+    margin:0;
+    padding:18px 20px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:13px;
+    line-height:1.9;
+    color:#7fffd4;
+    min-height:170px;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .code-body .fn{color:#8fe9ff;}
+  .code-body .ok{color:#28c840;}
+  .code-body .warn{color:#ffb84d;}
+  .cursor-blink{animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .hero-anim{
+    opacity:0;
+    transform:translateY(24px);
+    animation:heroFadeUp .8s ease forwards;
+  }
+  @keyframes heroFadeUp{to{opacity:1; transform:translateY(0);}}
+
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(30px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ---------- content ---------- */
+  section{max-width:1150px; margin:auto; padding:36px 22px;}
+  .hidden{display:none;}
+
+  .card{
+    background:var(--card-bg);
+    padding:32px 36px;
+    margin:26px 0;
+    border-radius:var(--radius);
+    box-shadow:0 18px 40px rgba(0,10,30,.35);
+    animation:fadeIn .7s ease;
+    transform-style:preserve-3d;
+    will-change:transform;
+    transition:transform .1s ease-out, box-shadow .3s ease;
+    position:relative;
+  }
+  .card:hover{box-shadow:0 26px 55px rgba(0,180,255,.25);}
+  .card h2{color:#ffffff; margin-top:0; display:flex; align-items:center; gap:10px;}
+  .card h3{color:#7fd4ff;}
+  .card h4{color:#7fd4ff; margin-bottom:6px;}
+  .card p{font-size:16px; line-height:1.75; color:#dce8fb;}
+  .card li{line-height:1.9; color:#dce8fb;}
+  .card b{color:#ffffff;}
+
+  .section-eyebrow{
+    font-family:"JetBrains Mono",monospace;
+    color:var(--cyan);
+    font-size:13px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:10px;
+  }
+
+  .action{
+    background:linear-gradient(135deg, var(--cyan-dim), var(--cyan));
+    color:#04101f;
+    border:none;
+    padding:11px 22px;
+    border-radius:25px;
+    cursor:pointer;
+    margin:5px 5px 0 0;
+    font-weight:700;
+    font-size:14px;
+    transition:.25s;
+  }
+  .action:hover{transform:translateY(-3px); box-shadow:0 10px 22px rgba(0,180,255,.35);}
+  .action.secondary{background:#eef4fb; color:#0a2a5c;}
+
+  footer{
+    background:var(--navy);
+    color:var(--ink-dim);
+    padding:30px;
+    text-align:center;
+    font-size:14px;
+    border-top:1px solid rgba(0,212,255,.15);
+  }
+  footer b{color:var(--ink);}
+
+  /* lessons */
+  .lesson-grid{display:flex; flex-wrap:wrap; gap:8px;}
+  .lesson-pill{
+    background:#eef4fb;
+    color:#0a2a5c;
+    border:none;
+    padding:10px 16px;
+    border-radius:20px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+    transition:.2s;
+    position:relative;
+  }
+  .lesson-pill.done::after{
+    content:"✓";
+    position:absolute; top:-6px; right:-6px;
+    background:#1cc47c; color:white;
+    width:18px; height:18px; border-radius:50%;
+    font-size:11px; display:flex; align-items:center; justify-content:center;
+  }
+  .lesson-pill:hover{background:var(--cyan); color:#04101f;}
+  .lesson{display:none;}
+  .lesson.visible{display:block;}
+
+  /* faq */
+  .faq-box{cursor:pointer; transition:.25s;}
+  .faq-box:hover{transform:translateX(8px); border-left:6px solid var(--cyan);}
+
+  /* quiz */
+  .quiz-question{
+    background:#f3f9ff;
+    padding:20px 22px;
+    margin:16px 0;
+    border-radius:15px;
+    border:1px solid #dceefc;
+    color:#0a2a5c;
+  }
+  .quiz-question h3{color:#0a2a5c;}
+  .quiz-question label{
+    display:block;
+    padding:9px 10px;
+    cursor:pointer;
+    border-radius:8px;
+    transition:.15s;
+    color:#0a2a5c;
+  }
+  .quiz-question label:hover{background:#e4f2fd;}
+  #quizResult{margin-top:18px; font-size:19px; font-weight:700; color:#ffffff;}
+  .lesson-picker{display:flex; flex-wrap:wrap; gap:8px; margin:14px 0;}
+
+  /* quiz review */
+  .review-btn{margin-top:16px; background:linear-gradient(135deg,var(--amber),#ff8f4d)!important;}
+  .quiz-review{margin-top:22px;}
+  .quiz-review h3{color:var(--ink);}
+  .review-item{
+    border-radius:14px;
+    padding:16px 18px;
+    margin:12px 0;
+    color:#0a2a5c;
+    border-left:6px solid transparent;
+  }
+  .review-item.review-correct{background:#eafff2; border-left-color:#2ecc71;}
+  .review-item.review-wrong{background:#fff1f0; border-left-color:#ff5b5b;}
+  .review-q{font-weight:700; margin-bottom:8px;}
+  .review-badge{margin-right:4px;}
+  .review-line{margin:4px 0; font-size:15px;}
+  .review-why{margin-top:8px; font-size:15px; background:rgba(255,255,255,.6); padding:8px 10px; border-radius:8px;}
+
+  /* guide answer box */
+  #guideAnswer{
+    background:#eef8ff;
+    padding:16px 20px;
+    border-radius:14px;
+    font-weight:500;
+    font-size:15px;
+    color:#0a2a5c;
+    margin-top:10px;
+  }
+
+  /* AI assistant */
+  #aiQuestion{
+    width:100%;
+    padding:15px 18px;
+    border-radius:15px;
+    border:1px solid #cfe0f2;
+    font-size:16px;
+    font-family:"Inter",sans-serif;
+  }
+  #aiAnswer{
+    background:#eef8ff;
+    padding:16px 20px;
+    border-radius:14px;
+    color:#0a2a5c;
+    margin-top:14px;
+    font-size:16px;
+  }
+
+  /* progress */
+  .progress-table{width:100%; border-collapse:collapse; margin-top:10px;}
+  .progress-table td,.progress-table th{padding:10px 12px; text-align:left; border-bottom:1px solid #eaf1f9; font-size:14px;}
+  .progress-bar-outer{background:#eaf1f9; border-radius:10px; height:10px; overflow:hidden; margin-top:14px;}
+  .progress-bar-inner{background:linear-gradient(90deg, var(--cyan-dim), var(--cyan)); height:100%; width:0%; transition:width .6s ease;}
+
+  /* ---------- entry gate (full-screen sign-in before the site) ---------- */
+  .entry-gate{
+    position:fixed; inset:0;
+    z-index:1000;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(0,212,255,.18), transparent 45%),
+      radial-gradient(circle at 80% 85%, rgba(255,184,77,.1), transparent 45%),
+      linear-gradient(160deg, #030b1a, #061733 60%, #030b1a);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:28px 20px;
+    overflow-y:auto;
+    transition:opacity .5s ease, visibility .5s ease;
+  }
+  .entry-gate.gate-hidden{opacity:0; visibility:hidden; pointer-events:none;}
+  .gate-brandmark{
+    position:absolute; top:18px; right:20px;
+    writing-mode:vertical-rl;
+    font-family:"JetBrains Mono",monospace;
+    letter-spacing:3px;
+    font-size:13px;
+    color:var(--cyan);
+    text-shadow:0 0 12px rgba(0,212,255,.7);
+  }
+  .gate-vnav{
+    position:absolute; top:60px; right:16px; bottom:20px;
+    display:flex; flex-direction:column; align-items:center; gap:20px;
+  }
+  .gate-vnav span{
+    writing-mode:vertical-rl;
+    color:var(--ink-dim);
+    font-size:11px;
+    letter-spacing:2px;
+    font-weight:600;
+  }
+  .gate-content{
+    position:relative; z-index:2;
+    width:100%; max-width:380px;
+    animation:fadeIn .6s ease;
+  }
+  .gate-eyebrow{
+    display:block;
+    font-family:"JetBrains Mono",monospace;
+    color:var(--amber);
+    font-size:12px;
+    letter-spacing:3px;
+    margin-bottom:10px;
+  }
+  .gate-content h1{
+    font-size:clamp(30px,7vw,42px);
+    color:var(--ink);
+    line-height:1.12;
+    margin:0 0 12px;
+  }
+  .gate-content h1 .accent{color:var(--cyan); text-shadow:0 0 20px rgba(0,212,255,.6);}
+  .gate-content p.gate-sub{
+    color:var(--ink-dim);
+    font-size:15px;
+    line-height:1.6;
+    margin-bottom:24px;
+  }
+  .gate-form input{
+    width:100%;
+    padding:14px 16px;
+    margin:0 0 12px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.06);
+    color:var(--ink);
+    font-size:15px;
+  }
+  .gate-form input::placeholder{color:var(--ink-dim);}
+  .gate-form input:focus{outline:none; border-color:var(--cyan); box-shadow:0 0 0 3px rgba(0,212,255,.15);}
+  .gate-error{
+    color:#ff8a8a;
+    font-size:13px;
+    min-height:18px;
+    margin:-4px 0 8px;
+  }
+  .gate-note{
+    font-size:12px; color:var(--ink-dim);
+    margin-top:14px;
+    text-align:center;
+  }
+  .gate-code{
+    margin-top:26px;
+    background:#050e1f;
+    border-radius:16px;
+    border:1px solid rgba(0,212,255,.3);
+    overflow:hidden;
+  }
+
+  /* ---------- feature block (vertical cards + motion) ---------- */
+  .feature-block{
+    position:relative;
+    background:linear-gradient(160deg, #061733, #030c1e 70%);
+    border:1px solid rgba(0,212,255,.16);
+    border-radius:24px;
+    padding:30px 18px 34px;
+    margin:26px 0;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    gap:26px;
+  }
+  .feature-bg-grid{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(0,212,255,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,.06) 1px, transparent 1px);
+    background-size:34px 34px;
+    mask-image:radial-gradient(ellipse at 30% 20%, black, transparent 75%);
+    pointer-events:none;
+  }
+  .feature-vnav{
+    position:absolute; top:16px; right:16px; z-index:2;
+    writing-mode:vertical-rl;
+    font-family:"JetBrains Mono",monospace;
+    letter-spacing:3px;
+    font-size:12px;
+    color:var(--cyan);
+    text-shadow:0 0 12px rgba(0,212,255,.6);
+  }
+  .feature-cards{
+    position:relative; z-index:2;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .feature-vcard{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(0,212,255,.18);
+    border-radius:18px;
+    padding:18px 16px;
+    display:flex;
+    flex-direction:row;
+    align-items:flex-start;
+    gap:10px;
+    height:190px;
+    position:relative;
+    overflow:hidden;
+    transition:border-color .3s ease, background .3s ease, transform .3s ease;
+  }
+  .feature-vcard:hover{
+    border-color:rgba(0,212,255,.55);
+    background:rgba(0,212,255,.05);
+  }
+  .feature-vcard .icon{
+    position:absolute; top:14px; right:16px;
+    font-size:24px;
+    animation:floatIcon 3.2s ease-in-out infinite;
+  }
+  .feature-vcard .fv-title{
+    writing-mode:vertical-rl;
+    color:var(--cyan);
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:700;
+    font-size:19px;
+    text-shadow:0 0 14px rgba(0,212,255,.35);
+  }
+  .feature-vcard .fv-desc{
+    writing-mode:vertical-rl;
+    color:var(--ink-dim);
+    font-size:12px;
+    line-height:1.65;
+    max-height:100%;
+  }
+  .feature-heading{
+    position:relative; z-index:2;
+    display:flex;
+    align-items:flex-end;
+    gap:14px;
+  }
+  .feature-heading .fh-sub{
+    writing-mode:vertical-rl;
+    color:var(--ink-dim);
+    font-size:12.5px;
+    line-height:1.7;
+    max-height:150px;
+  }
+  .feature-heading .fh-title{
+    margin:0;
+    color:var(--ink);
+    font-size:clamp(32px,10vw,48px);
+    line-height:1.05;
+    font-weight:700;
+  }
+
+  @keyframes floatIcon{0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);}}
+
+  /* scroll-triggered entrance motion, shared across cards */
+  .reveal{
+    opacity:0;
+    transform:translateY(36px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+
+  @media (max-width:680px){
+    .hero{min-height:auto; padding:60px 16px 30px;}
+    .hero-inner{flex-direction:column;}
+    .headline-h .line{font-size:clamp(26px,9vw,38px);}
+    .card{padding:24px 20px;}
+    .gate-vnav{display:none;}
+  }
+
+  /* ---------- laptop / desktop layout ---------- */
+  @media (min-width:960px){
+    section{padding:48px 32px;}
+    nav{padding:14px 32px;}
+
+    #home, #about, #faq{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px;
+      align-items:start;
+    }
+    #home .card:first-child, #about .card:first-child{grid-column:1 / -1;}
+
+    .feature-block{flex-direction:row; align-items:stretch; padding:40px;}
+    .feature-cards{flex:1.4; flex-direction:row; flex-wrap:wrap; gap:18px;}
+    .feature-vcard{flex:1 1 45%; height:220px;}
+    .feature-heading{flex:1; flex-direction:column; align-items:flex-start; justify-content:center; gap:10px;}
+    .feature-heading .fh-sub{writing-mode:horizontal-tb; max-height:none; max-width:280px;}
+    .feature-heading .fh-title{writing-mode:horizontal-tb;}
+
+    .lesson-grid, .lesson-picker{gap:10px;}
+    .quiz-question{padding:24px 28px;}
+  }
+
+  @media (min-width:1300px){
+    section{max-width:1280px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .hero-anim{opacity:1 !important; transform:none !important;}
+  }
+
+  /* ================= LIGHT THEME ================= */
+  body.light{
+    --navy-deep:#eef4fc;
+    --navy:#dbe8f7;
+    --navy-panel:#ffffff;
+    --ink:#0a1f3d;
+    --ink-dim:#4b6c92;
+    --card-bg:#ffffff;
+  }
+  body.light{ --ink-dim:#516c8c; }
+  body.light{ background:var(--navy-deep); }
+  body.light::before{
+    background:
+      radial-gradient(circle at 15% 20%, rgba(0,153,204,.10), transparent 40%),
+      radial-gradient(circle at 85% 75%, rgba(255,184,77,.10), transparent 45%),
+      linear-gradient(160deg, #eef4fc, #dbe8f7 60%, #eef4fc);
+  }
+  body.light nav{ background:rgba(255,255,255,.88); border-bottom:1px solid rgba(0,145,194,.2); }
+  body.light .nav-brand{ color:#0a1f3d; }
+  body.light nav button.nav-btn{ color:#3a567e; }
+  body.light .card{ box-shadow:0 14px 34px rgba(20,60,110,.12); border:1px solid rgba(20,60,110,.06); }
+  body.light .card h3, body.light .card h4{ color:#0091c2; }
+  body.light .card p, body.light .card li{ color:#26436b; }
+  body.light .card b{ color:#0a1f3d; }
+  body.light footer{ background:#dbe8f7; color:#3a567e; }
+  body.light footer b{ color:#0a1f3d; }
+  body.light .feature-block{ background:linear-gradient(160deg,#f4f9ff,#e4eefb 70%); border:1px solid rgba(0,145,194,.18); }
+  body.light .feature-vcard{ background:rgba(0,145,194,.04); border:1px solid rgba(0,145,194,.18); }
+  body.light .lesson-pill{ background:#0a2a5c; color:#eef4fb; }
+  body.light .action.secondary{ background:#0a2a5c; color:#eef4fb; }
+
+  /* ---------- theme toggle ---------- */
+  #themeToggle{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(0,212,255,.3);
+    color:var(--ink);
+    width:38px; height:38px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+    transition:.25s;
+    flex-shrink:0;
+  }
+  #themeToggle:hover{ background:var(--cyan); color:#04101f; transform:translateY(-2px); }
+
+  /* ---------- nav search ---------- */
+  .nav-search{ position:relative; }
+  .nav-search input{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(0,212,255,.25);
+    color:var(--ink);
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:13px;
+    width:150px;
+    transition:.25s;
+    font-family:"Inter",sans-serif;
+  }
+  .nav-search input:focus{ outline:none; width:200px; border-color:var(--cyan); }
+  .nav-search input::placeholder{ color:var(--ink-dim); }
+  .search-results{
+    position:absolute; top:calc(100% + 8px); right:0;
+    width:280px; max-height:340px; overflow-y:auto;
+    background:var(--navy-panel);
+    border:1px solid rgba(0,212,255,.3);
+    border-radius:14px;
+    box-shadow:0 20px 40px rgba(0,10,30,.5);
+    z-index:500;
+    display:none;
+  }
+  .search-results.show{ display:block; }
+  .search-results .sr-item{
+    padding:12px 16px;
+    cursor:pointer;
+    border-bottom:1px solid rgba(0,212,255,.1);
+    transition:.15s;
+  }
+  .search-results .sr-item:last-child{ border-bottom:none; }
+  .search-results .sr-item:hover{ background:rgba(0,212,255,.12); }
+  .search-results .sr-item .sr-tag{ color:var(--cyan); font-size:10px; letter-spacing:1px; text-transform:uppercase; font-family:"JetBrains Mono",monospace; display:block; margin-bottom:3px; }
+  .search-results .sr-item .sr-title{ color:var(--ink); font-weight:600; font-size:14px; }
+  .search-results .sr-empty{ padding:16px; color:var(--ink-dim); font-size:13px; text-align:center; }
+
+  /* ================= GAMIFICATION ================= */
+  .stat-strip{ display:flex; flex-wrap:wrap; gap:14px; margin:18px 0; }
+  .stat-chip{
+    background:rgba(0,212,255,.08);
+    border:1px solid rgba(0,212,255,.25);
+    border-radius:14px;
+    padding:14px 18px;
+    flex:1 1 130px;
+    text-align:center;
+  }
+  .stat-chip .sc-value{ font-family:"Space Grotesk",sans-serif; font-size:26px; font-weight:700; color:var(--cyan); display:block; }
+  .stat-chip .sc-label{ font-size:12px; color:var(--ink-dim); letter-spacing:.5px; text-transform:uppercase; }
+
+  .xp-bar-outer{ background:rgba(255,255,255,.08); border-radius:10px; height:14px; overflow:hidden; margin:8px 0 4px; }
+  body.light .xp-bar-outer{ background:#dbe8f7; }
+  .xp-bar-inner{
+    height:100%;
+    background:linear-gradient(90deg, var(--amber), var(--cyan));
+    width:0%;
+    transition:width .8s ease;
+    border-radius:10px;
+  }
+  .xp-bar-label{ font-size:12px; color:var(--ink-dim); display:flex; justify-content:space-between; }
+
+  .badge-grid{ display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; }
+  .badge{
+    width:110px;
+    text-align:center;
+    padding:14px 8px;
+    border-radius:14px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.1);
+    opacity:.35;
+    filter:grayscale(1);
+    transition:.3s;
+  }
+  .badge.unlocked{ opacity:1; filter:none; border-color:rgba(255,184,77,.5); background:rgba(255,184,77,.08); box-shadow:0 0 18px rgba(255,184,77,.15); }
+  .badge .b-icon{ font-size:30px; display:block; margin-bottom:6px; }
+  .badge .b-name{ font-size:12px; font-weight:700; color:var(--ink); }
+  .badge .b-desc{ font-size:10px; color:var(--ink-dim); margin-top:3px; display:block; }
+
+  /* toast notifications */
+  #toastStack{
+    position:fixed; top:80px; right:16px; z-index:2000;
+    display:flex; flex-direction:column; gap:10px;
+    max-width:min(320px, calc(100vw - 32px));
+  }
+  .toast{
+    background:linear-gradient(135deg, #0c2650, #071c3a);
+    border:1px solid var(--cyan);
+    color:var(--ink);
+    padding:14px 18px;
+    border-radius:14px;
+    box-shadow:0 12px 30px rgba(0,10,30,.5), 0 0 20px rgba(0,212,255,.25);
+    font-size:14px;
+    animation:toastIn .35s ease, toastOut .4s ease 3.2s forwards;
+  }
+  .toast b{ color:var(--amber); }
+  .toast.badge-toast{ border-color:var(--amber); box-shadow:0 12px 30px rgba(0,10,30,.5), 0 0 20px rgba(255,184,77,.3); }
+  @keyframes toastIn{ from{opacity:0; transform:translateX(40px);} to{opacity:1; transform:translateX(0);} }
+  @keyframes toastOut{ to{opacity:0; transform:translateX(40px);} }
+
+  /* ================= ACTIVITIES ================= */
+  .activity-box{
+    background:rgba(0,212,255,.07);
+    color:var(--ink);
+    padding:22px 24px;
+    border-radius:16px;
+    margin-top:20px;
+    border:1px solid rgba(0,212,255,.28);
+  }
+  .activity-box h4{ color:var(--amber); margin-top:0; }
+  .card .activity-box p, .card .activity-box li{ color:var(--ink); }
+  .activity-box .opt-btn{
+    display:block; width:100%; text-align:left;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.18); color:var(--ink);
+    padding:11px 16px; margin:6px 0; border-radius:10px;
+    cursor:pointer; font-size:14px; font-family:"Inter",sans-serif; transition:.15s;
+  }
+  .activity-box .opt-btn:hover{ background:rgba(0,212,255,.15); border-color:var(--cyan); }
+  .activity-box .opt-btn:disabled{ cursor:default; }
+  .activity-box .opt-btn.correct{ background:rgba(40,200,64,.22); border-color:#28c840; color:#c8ffe0; font-weight:700; }
+  .activity-box .opt-btn.incorrect{ background:rgba(255,95,87,.2); border-color:#ff5f57; color:#ffd3d0; }
+  .activity-box .fill-input{
+    width:100%; padding:11px 14px; border-radius:10px;
+    border:1px solid rgba(0,212,255,.3); background:rgba(255,255,255,.06); color:var(--ink);
+    font-size:14px; margin:8px 0; font-family:"Inter",sans-serif;
+  }
+  .activity-box .fill-input::placeholder{ color:var(--ink-dim); }
+  .activity-feedback{ margin-top:12px; font-weight:600; padding:10px 14px; border-radius:10px; display:none; }
+  .activity-feedback.show{ display:block; }
+  .activity-feedback.right{ background:rgba(40,200,64,.18); color:#a4f5c4; }
+  .activity-feedback.wrong{ background:rgba(255,95,87,.18); color:#ffc7c2; }
+
+  body.light .activity-box{ background:#eef8ff; border:1px solid #cfe6f9; color:#0a2a5c; }
+  body.light .activity-box h4{ color:#0091c2; }
+  body.light .card .activity-box p, body.light .card .activity-box li{ color:#0a2a5c; }
+  body.light .activity-box .opt-btn{ background:#ffffff; border:1px solid #cfe0f2; color:#0a2a5c; }
+  body.light .activity-box .opt-btn:hover{ background:#e4f2fd; }
+  body.light .activity-box .opt-btn.correct{ background:#d3f7e4; border-color:#28c840; color:#0a2a5c; }
+  body.light .activity-box .opt-btn.incorrect{ background:#ffe1e1; border-color:#ff5f57; color:#0a2a5c; }
+  body.light .activity-box .fill-input{ background:#ffffff; border:1px solid #cfe0f2; color:#0a2a5c; }
+  body.light .activity-feedback.right{ background:#d3f7e4; color:#166534; }
+  body.light .activity-feedback.wrong{ background:#ffe1e1; color:#8a1c1c; }
+
+  /* ================= FLASHCARDS ================= */
+  .flash-wrap{ max-width:480px; margin:20px auto 10px; perspective:1400px; }
+  .flash-card{
+    height:260px; border-radius:20px; cursor:pointer;
+    position:relative; transform-style:preserve-3d;
+    transition:transform .6s cubic-bezier(.4,.2,.2,1);
+  }
+  .flash-card.flipped{ transform:rotateY(180deg); }
+  .flash-face{
+    position:absolute; inset:0; backface-visibility:hidden;
+    border-radius:20px; display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:30px; font-size:20px; font-weight:600;
+    box-shadow:0 20px 45px rgba(0,10,30,.4);
+  }
+  .flash-face.front{ background:linear-gradient(135deg, var(--card-bg), #0c2650); color:var(--ink); border:1px solid rgba(0,212,255,.3); }
+  .flash-face.back{ background:linear-gradient(135deg, #0091c2, #00d4ff); color:#04101f; transform:rotateY(180deg); }
+  .flash-controls{ display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:18px; }
+  .flash-counter{ text-align:center; color:var(--ink-dim); font-size:13px; margin-top:10px; }
+  .flash-hint{ position:absolute; bottom:14px; left:0; right:0; font-size:11px; opacity:.6; text-transform:uppercase; letter-spacing:1px; }
+
+  /* ================= NOTES / BOOKMARKS ================= */
+  .note-item, .bookmark-item{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:12px;
+    padding:14px 18px;
+    margin-bottom:10px;
+    display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+  }
+  .note-item .ni-text{ flex:1; font-size:14px; color:var(--ink); white-space:pre-wrap; }
+  .note-item .ni-meta{ font-size:11px; color:var(--ink-dim); margin-bottom:4px; display:block; font-family:"JetBrains Mono",monospace; }
+  .del-btn{ background:none; border:1px solid rgba(255,90,90,.4); color:#ff8a8a; border-radius:8px; padding:6px 12px; cursor:pointer; font-size:12px; flex-shrink:0; }
+  .del-btn:hover{ background:rgba(255,90,90,.15); }
+  #lessonNotesArea{ width:100%; min-height:90px; padding:14px; border-radius:12px; border:1px solid rgba(0,212,255,.25); background:rgba(255,255,255,.05); color:var(--ink); font-family:"Inter",sans-serif; font-size:14px; resize:vertical; }
+  #lessonNotesArea::placeholder{ color:var(--ink-dim); }
+  .bookmark-star{ background:none; border:none; cursor:pointer; font-size:22px; line-height:1; padding:2px 6px; }
+
+  /* ================= CERTIFICATE ================= */
+  .certificate{
+    background:linear-gradient(160deg, #ffffff, #f4f9ff);
+    color:#0a2a5c;
+    border-radius:20px;
+    padding:50px 40px;
+    text-align:center;
+    border:6px double #0091c2;
+    position:relative;
+  }
+  .certificate .cert-brand{ font-family:"JetBrains Mono",monospace; letter-spacing:3px; color:#0091c2; font-size:13px; }
+  .certificate h1{ font-family:"Space Grotesk",sans-serif; font-size:clamp(24px,5vw,38px); margin:14px 0 4px; color:#0a1f3d; }
+  .certificate .cert-name{ font-size:clamp(26px,6vw,40px); color:#0091c2; font-weight:700; margin:18px 0; font-family:"Space Grotesk",sans-serif; }
+  .certificate .cert-id{ font-family:"JetBrains Mono",monospace; font-size:12px; color:#516c8c; margin-top:20px; }
+  @media print{
+    body *{ visibility:hidden; }
+    .certificate, .certificate *{ visibility:visible; }
+    .certificate{ position:fixed; inset:0; border:none; }
+    nav, footer, #toastStack{ display:none !important; }
+  }
+
+  @media (max-width:680px){
+    .nav-search input{ width:110px; }
+    .nav-search input:focus{ width:150px; }
+    .badge{ width:96px; }
+  }
+
+  /* ================= VIDEO TUTORIALS ================= */
+  .tutorial-box{
+    background:rgba(255,64,64,.07);
+    border:1px solid rgba(255,90,90,.35);
+    border-radius:16px;
+    padding:22px 24px;
+    margin-top:20px;
+  }
+  .tutorial-box h4{ color:#ff7a7a; margin:0 0 4px; }
+  .card .tutorial-box p.tut-sub{ margin:0 0 14px; font-size:14px; color:var(--ink-dim); }
+  .tut-item{ margin-bottom:10px; }
+  .tut-row{ display:flex; gap:8px; align-items:stretch; flex-wrap:wrap; }
+  .tut-link{
+    flex:1 1 260px;
+    display:flex; align-items:center; gap:12px;
+    padding:12px 14px;
+    border-radius:12px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.14);
+    color:var(--ink);
+    text-decoration:none;
+    font-weight:600; font-size:14px;
+    transition:.2s;
+  }
+  .tut-link:hover{ background:rgba(255,90,90,.15); border-color:#ff5a5a; transform:translateX(4px); }
+  .tut-play{
+    flex-shrink:0; width:30px; height:22px; border-radius:6px;
+    background:#ff0033; color:#fff; font-size:11px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .tut-title{ flex:1; }
+  .tut-kind{ font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-dim); font-family:"JetBrains Mono",monospace; white-space:nowrap; }
+  .tut-embed-btn{
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2);
+    color:var(--ink); border-radius:12px; padding:0 14px; cursor:pointer;
+    font-weight:600; font-size:13px; font-family:"Inter",sans-serif;
+  }
+  .tut-embed-btn:hover{ background:rgba(255,90,90,.2); border-color:#ff5a5a; }
+  .tut-embed{ display:none; margin-top:10px; }
+  .tut-embed.open{ display:block; }
+  .tut-embed iframe{ width:100%; aspect-ratio:16/9; border:0; border-radius:12px; background:#000; }
+  .tut-embed small{ display:block; margin-top:6px; color:var(--ink-dim); font-size:12px; }
+  body.light .tutorial-box{ background:#fff5f5; border-color:#f3b8b8; }
+  body.light .tutorial-box h4{ color:#c62828; }
+  body.light .tut-link{ background:#ffffff; border-color:#e8d4d4; color:#0a2a5c; }
+  body.light .tut-embed-btn{ background:#ffffff; border-color:#e8d4d4; color:#0a2a5c; }
+
+  /* ================= ADMIN ================= */
+  .admin-btn{
+    background:rgba(255,184,77,.14);
+    border:1px solid rgba(255,184,77,.55);
+    color:var(--amber);
+    padding:9px 14px;
+    border-radius:30px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:13px;
+    font-family:"Inter",sans-serif;
+    transition:.25s;
+    white-space:nowrap;
+  }
+  .admin-btn:hover{ background:var(--amber); color:#04101f; transform:translateY(-2px); }
+  body.light .admin-btn{ color:#a35f00; background:rgba(255,184,77,.22); }
+  body.light .admin-btn:hover{ color:#04101f; }
+
+  .admin-modal{
+    position:fixed; inset:0; z-index:1500;
+    background:rgba(2,8,20,.78);
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    display:none; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .admin-modal.show{ display:flex; }
+  .admin-modal-box{
+    background:var(--navy-panel);
+    color:var(--ink);
+    border:1px solid rgba(0,212,255,.4);
+    border-radius:20px;
+    padding:28px;
+    width:100%; max-width:380px;
+    box-shadow:0 30px 70px rgba(0,10,30,.6);
+    animation:fadeIn .35s ease;
+  }
+  .admin-modal-box h3{ margin:0 0 6px; font-size:22px; }
+  .admin-modal-box p{ margin:0 0 16px; color:var(--ink-dim); font-size:14px; line-height:1.5; }
+
+  .admin-input{
+    width:100%;
+    padding:11px 14px;
+    margin:6px 0;
+    border-radius:10px;
+    border:1px solid rgba(0,212,255,.3);
+    background:rgba(255,255,255,.06);
+    color:var(--ink);
+    font-size:14px;
+    font-family:"Inter",sans-serif;
+  }
+  .admin-input:focus{ outline:none; border-color:var(--cyan); box-shadow:0 0 0 3px rgba(0,212,255,.15); }
+  .admin-input::placeholder{ color:var(--ink-dim); }
+  body.light .admin-input{ background:#ffffff; border-color:#cfe0f2; }
+  .admin-row{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:12px;
+    padding:12px 14px;
+    margin-bottom:10px;
+  }
+  body.light .admin-row{ background:#f4f9ff; border-color:#dbe8f7; }
+  .admin-row-actions{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:6px; }
+  .admin-add{ margin-top:18px; padding-top:16px; border-top:1px dashed rgba(0,212,255,.3); }
+  .admin-msg{ min-height:20px; font-size:13px; margin:6px 0; font-weight:600; }
+  .admin-msg.err{ color:#ff8a8a; }
+  .admin-msg.ok{ color:#28c840; }
+  body.light .admin-msg.err{ color:#c62828; }
+  body.light .admin-msg.ok{ color:#15803d; }
+  .admin-actions{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+  .action.danger{ background:linear-gradient(135deg,#ff5f57,#ff8a5c); color:#fff; }
+  .lesson-pill.sel{ background:var(--cyan); color:#04101f; }
+  body.light .lesson-pill.sel{ background:var(--cyan-dim); color:#ffffff; }
+  @media (max-width:680px){
+    .admin-btn{ padding:8px 11px; font-size:12px; }
+  }
+
+  /* fix: ID-based display:grid rules were overriding .hidden on wide screens */
+  #home.hidden, #about.hidden, #faq.hidden{ display:none; }
+</style>
+</head>
+<body>
+
+<!-- ========================== ENTRY GATE ========================== -->
+<div class="entry-gate" id="entryGate">
+  <div class="gate-brandmark">ICT⚡HUB</div>
+  <div class="gate-vnav">
+    <span>SECURE</span><span>LOCAL</span><span>ACCESS</span>
+  </div>
+  <div class="gate-content">
+    <span class="gate-eyebrow">WELCOME · ICT LEARNINGHUB</span>
+    <h1 id="gateHeadline">Enter The <span class="accent">Learning</span> Grid</h1>
+    <p class="gate-sub">Sign in with your name and Gmail address before you continue — we'll use it to greet you and save your quiz progress on this device.</p>
+    <div class="gate-form">
+      <input id="gateName" type="text" placeholder="Your name" onkeydown="if(event.key==='Enter')document.getElementById('gateEmail').focus()">
+      <input id="gateEmail" type="email" placeholder="Your Gmail address" onkeydown="if(event.key==='Enter')submitGate()">
+      <p class="gate-error" id="gateError"></p>
+      <button class="pill-cta primary" style="width:100%;" onclick="submitGate()">Enter LearningHub →</button>
+      <button class="pill-cta ghost" id="gateCancelBtn" style="width:100%; display:none;" onclick="closeGate()">Cancel</button>
+    </div>
+    <div class="gate-code">
+      <div class="code-topbar">
+        <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
+        <span class="code-filename">welcome.sh</span>
+      </div>
+      <pre class="code-body" id="gateTypewriter"></pre>
+    </div>
+    <p class="gate-note">This is a local sign-in for this browser only — no account is created on a server.</p>
+  </div>
+</div>
+
+<!-- ========================== NAV ========================== -->
+<nav>
+  <div class="nav-brand"><span class="dot"></span>ICT LEARNINGHUB</div>
+  <div class="nav-links" id="navLinks">
+    <button class="nav-btn" onclick="showPage('home')">Home</button>
+    <button class="nav-btn" onclick="showPage('lessons')">Lessons</button>
+    <button class="nav-btn" onclick="showPage('guide')">Practice</button>
+    <button class="nav-btn" onclick="showPage('quiz')">Quizzes</button>
+    <button class="nav-btn" onclick="showPage('flashcards')">Flashcards</button>
+    <button class="nav-btn" onclick="showPage('progress')">Progress</button>
+    <button class="nav-btn" onclick="showPage('ai')">AI Assistant</button>
+    <button class="nav-btn" onclick="showPage('profile')">Profile</button>
+    <button class="nav-btn" onclick="showPage('about')">About</button>
+    <button class="nav-btn" onclick="showPage('faq')">FAQ</button>
+  </div>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <div class="nav-search">
+      <input id="siteSearch" type="text" placeholder="Search ICT topics…" oninput="runSearch(this.value)" onfocus="runSearch(this.value)">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    <button id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
+    <button id="adminBtn" class="admin-btn" onclick="openAdmin()" title="Open the admin panel">🛠 Admin</button>
+    <button id="loginBtn" onclick="openGate()">Log In</button>
+  </div>
+</nav>
+<div id="toastStack"></div>
+
+<!-- ========================== HERO (horizontal, split layout) ========================== -->
+<header class="hero" id="mainHero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-grid-floor"></div>
+
+  <div class="hero-inner">
+    <div class="hero-text">
+      <span class="eyebrow-h hero-anim" style="animation-delay:.05s;">ICT LEARNING PLATFORM</span>
+      <h1 class="headline-h">
+        <span class="line deepblue hero-anim" style="animation-delay:.15s;">Fix The</span>
+        <span class="line accent hero-anim" style="animation-delay:.28s;">Future</span>
+        <span class="line deepblue hero-anim" style="animation-delay:.4s;">With Real Skills</span>
+      </h1>
+      <p class="hero-desc hero-anim" style="animation-delay:.52s;">Learn to diagnose and fix real computer, network, and software problems using guided lessons, an AI assistant, and hands-on quizzes.</p>
+      <div class="hero-ctas-h hero-anim" style="animation-delay:.64s;">
+        <button class="pill-cta primary" onclick="showPage('lessons')">Explore Lessons</button>
+        <button class="pill-cta ghost" onclick="showPage('quiz')">Take a Quiz</button>
+      </div>
+    </div>
+
+    <div class="hero-code-panel hero-anim" style="animation-delay:.4s;">
+      <div class="code-topbar">
+        <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
+        <span class="code-filename">diagnose.sh</span>
+      </div>
+      <pre class="code-body" id="heroTypewriter"></pre>
+    </div>
+  </div>
+</header>
+
+<!-- ========================== HOME ========================== -->
+<section id="home">
+  <div class="card">
+    <span class="section-eyebrow">Welcome</span>
+    <h2>Welcome to ICT LearningHub</h2>
+    <p>ICT LearningHub is an interactive educational platform designed to help students understand Information and Communication Technology through organized lessons, practical examples, troubleshooting activities, and assessments.</p>
+    <p>Technology has become an important part of modern life. Computers, networks, smartphones, applications, and digital systems are used in schools, businesses, organizations, and everyday activities.</p>
+    <p>However, technology does not always work perfectly. Users may experience problems such as computers not turning on, slow performance, internet connection issues, software errors, hardware failures, and cybersecurity threats.</p>
+    <p>ICT troubleshooting is the skill of identifying problems, finding possible causes, testing solutions, and restoring technology systems into proper working condition.</p>
+  </div>
+  <div class="card">
+    <h2>What is ICT Troubleshooting?</h2>
+    <p>ICT troubleshooting is a systematic process used by technicians and computer users to diagnose and solve problems involving hardware, software, networks, and digital devices.</p>
+    <h3>The Basic Troubleshooting Process</h3>
+    <ul>
+      <li><b>1. Identify the Problem</b> — Observe symptoms, collect information, and understand what is happening.</li>
+      <li><b>2. Establish Possible Causes</b> — Analyze possible reasons why the problem occurred.</li>
+      <li><b>3. Test Solutions</b> — Try solutions carefully while checking the results.</li>
+      <li><b>4. Apply the Solution</b> — Perform the correct repair or adjustment.</li>
+      <li><b>5. Document the Solution</b> — Record the problem and solution for future reference.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2>Why Learn ICT Troubleshooting?</h2>
+    <p>Learning troubleshooting skills helps students become more confident technology users. Instead of immediately replacing devices or asking for help, users can understand problems and solve simple technical issues independently.</p>
+    <ul>
+      <li>Develops logical thinking and problem-solving skills.</li>
+      <li>Improves understanding of computer systems.</li>
+      <li>Reduces unnecessary repair expenses.</li>
+      <li>Prepares students for ICT-related careers.</li>
+      <li>Builds confidence when using technology.</li>
+    </ul>
+  </div>
+  <div class="feature-block">
+    <div class="feature-bg-grid"></div>
+    <div class="feature-vnav">
+      <span>ICT⚡HUB</span>
+    </div>
+    <div class="feature-cards">
+      <div class="feature-vcard reveal" style="transition-delay:0s;">
+        <span class="icon">⚡</span>
+        <span class="fv-desc">Step-by-step guides covering hardware, software, and networks.</span>
+        <span class="fv-title">Hands-On Lessons</span>
+      </div>
+      <div class="feature-vcard reveal" style="transition-delay:.12s;">
+        <span class="icon">🛡️</span>
+        <span class="fv-desc">Learn to spot malware, phishing, and protect your accounts.</span>
+        <span class="fv-title">Real Security Skills</span>
+      </div>
+      <div class="feature-vcard reveal" style="transition-delay:.24s;">
+        <span class="icon">🤖</span>
+        <span class="fv-desc">Ask the built-in AI assistant any time you get stuck.</span>
+        <span class="fv-title">AI-Guided Help</span>
+      </div>
+      <div class="feature-vcard reveal" style="transition-delay:.36s;">
+        <span class="icon">📝</span>
+        <span class="fv-desc">Test yourself after every lesson and track your progress.</span>
+        <span class="fv-title">Instant Quizzes</span>
+      </div>
+    </div>
+    <div class="feature-heading reveal" style="transition-delay:.48s;">
+      <span class="fh-sub">Interactive lessons built for real troubleshooting skills.</span>
+      <h2 class="fh-title">What You'll<br>Master</h2>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== ABOUT ========================== -->
+<section id="about" class="hidden">
+  <div class="card">
+    <span class="section-eyebrow">About</span>
+    <h2>About ICT LearningHub</h2>
+    <p>ICT LearningHub is a learning platform created to provide students with an easy and interactive way to study Information and Communication Technology.</p>
+    <p>The website combines educational lessons, troubleshooting guides, quizzes, and an AI learning assistant to create a complete ICT learning experience.</p>
+    <p>Our goal is to make technology education more understandable, engaging, and useful for students who want to improve their digital skills.</p>
+  </div>
+  <div class="card">
+    <h2>Our Mission</h2>
+    <p>Our mission is to provide accessible and effective ICT education that helps learners understand technology, develop technical skills, and solve real-world computer problems.</p>
+  </div>
+  <div class="card">
+    <h2>Our Vision</h2>
+    <p>Our vision is to become a reliable digital learning platform that encourages students to explore technology and become future-ready ICT professionals.</p>
+  </div>
+  <div class="card">
+    <h2>Our Purpose</h2>
+    <ul>
+      <li>To teach important ICT troubleshooting concepts.</li>
+      <li>To provide simple explanations of complex technology problems.</li>
+      <li>To encourage independent learning.</li>
+      <li>To develop practical problem-solving abilities.</li>
+      <li>To make ICT education interactive and enjoyable.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========================== LESSONS ========================== -->
+<section id="lessons" class="hidden">
+  <div class="card">
+    <span class="section-eyebrow">Curriculum</span>
+    <h2>ICT Learning Lessons</h2>
+    <p>Select a lesson below to start learning. Each lesson contains important information, examples, and troubleshooting methods. A ✓ appears once you've passed that lesson's quiz. Lessons with hands-on steps include a 🎬 <b>Video Tutorials</b> box so you can watch and follow along on YouTube.</p>
+    <div class="lesson-grid" id="lessonPills"></div>
+  </div>
+
+  <div class="card lesson visible" id="lesson1">
+    <h2>Lesson 1: Introduction to ICT Troubleshooting</h2>
+    <p>ICT troubleshooting is the process of identifying, analyzing, and solving problems involving computers, networks, software, and other digital devices.</p>
+    <p>Every technology user experiences problems. A computer may not start, a program may stop responding, or an internet connection may suddenly disappear. Troubleshooting helps users understand these problems and find effective solutions.</p>
+    <h3>Importance of ICT Troubleshooting</h3>
+    <ul>
+      <li>Helps solve technology problems faster.</li>
+      <li>Prevents unnecessary replacement of devices.</li>
+      <li>Saves time and resources.</li>
+      <li>Improves technical knowledge.</li>
+      <li>Develops critical thinking skills.</li>
+    </ul>
+    <h3>The Troubleshooting Process</h3>
+    <h4>Step 1: Identify the Problem</h4>
+    <p>The first step is understanding the issue. Technicians collect information by observing symptoms, checking error messages, and asking users questions. Example: a computer turns on but shows no display.</p>
+    <h4>Step 2: Establish Possible Causes</h4>
+    <p>After identifying the problem, possible causes are listed. The technician checks hardware, software, connections, and settings.</p>
+    <h4>Step 3: Test Solutions</h4>
+    <p>Solutions are tested one at a time to determine which action solves the problem.</p>
+    <h4>Step 4: Apply the Solution</h4>
+    <p>After finding the cause, the correct repair is applied.</p>
+    <h4>Step 5: Document the Solution</h4>
+    <p>Recording problems and solutions helps technicians solve similar issues in the future.</p>
+    <button class="action" onclick="startQuiz(1)">📝 Take Lesson 1 Quiz</button>
+  </div>
+
+  <div class="card lesson" id="lesson2">
+    <h2>Lesson 2: Basic Computer Troubleshooting</h2>
+    <p>Computers are made of different hardware components and software systems that work together. When one part fails, the entire system may experience problems.</p>
+    <h3>Common Computer Problems</h3>
+    <h4>1. Computer Does Not Turn On</h4>
+    <p>A computer that does not start may have problems with power connections, batteries, power supply units, or internal components.</p>
+    <h3>Possible Causes</h3>
+    <ul><li>Loose power cable.</li><li>Dead laptop battery.</li><li>Faulty power supply.</li><li>Damaged hardware component.</li></ul>
+    <h3>Troubleshooting Steps</h3>
+    <ol><li>Check all power connections.</li><li>Try another power outlet.</li><li>Check battery condition.</li><li>Inspect hardware components.</li></ol>
+    <h4>2. Slow Computer Performance</h4>
+    <p>A computer may become slow because of too many running applications, limited storage space, malware infections, or outdated hardware.</p>
+    <h3>Solutions</h3>
+    <ul><li>Close unnecessary applications.</li><li>Remove unwanted files.</li><li>Scan for malware.</li><li>Update software.</li><li>Upgrade hardware if needed.</li></ul>
+    <h3>Computer Maintenance Tips</h3>
+    <ul><li>Keep the operating system updated.</li><li>Clean dust from hardware.</li><li>Avoid installing unknown programs.</li><li>Create backups of important files.</li></ul>
+    <button class="action" onclick="startQuiz(2)">📝 Take Lesson 2 Quiz</button>
+  </div>
+
+  <div class="card lesson" id="lesson3">
+    <h2>Lesson 3: Hardware Troubleshooting</h2>
+    <p>Hardware troubleshooting focuses on solving problems related to the physical components of a computer system.</p>
+    <p>Computer hardware includes parts such as the motherboard, processor, RAM, storage devices, power supply, monitor, keyboard, and mouse.</p>
+    <h3>Common Hardware Problems</h3>
+    <h4>1. RAM Problems</h4>
+    <p>RAM (Random Access Memory) temporarily stores information needed by running programs. When RAM has problems, computers may freeze, restart, or fail to start.</p>
+    <h3>Possible Causes</h3>
+    <ul><li>Loose RAM connection.</li><li>Dust buildup.</li><li>Damaged memory module.</li><li>Incorrect installation.</li></ul>
+    <h3>Solutions</h3>
+    <ul><li>Turn off the computer safely.</li><li>Reconnect RAM properly.</li><li>Clean dust from components.</li><li>Test the computer again.</li></ul>
+    <h4>2. Overheating Problems</h4>
+    <p>Computers produce heat while operating. Cooling fans and proper airflow help prevent damage caused by high temperature.</p>
+    <h3>Causes of Overheating</h3>
+    <ul><li>Dust blocking ventilation.</li><li>Broken cooling fan.</li><li>Poor airflow.</li><li>Heavy computer usage.</li></ul>
+    <h3>Solutions</h3>
+    <ul><li>Clean computer vents.</li><li>Check cooling fans.</li><li>Improve airflow around the device.</li><li>Avoid blocking ventilation areas.</li></ul>
+    <button class="action" onclick="startQuiz(3)">📝 Take Lesson 3 Quiz</button>
+  </div>
+
+  <div class="card lesson" id="lesson4">
+    <h2>Lesson 4: Network Troubleshooting</h2>
+    <p>Network troubleshooting focuses on solving problems involving internet connections, routers, Wi-Fi, and communication between devices.</p>
+    <p>Networks allow computers and devices to communicate and share information. When network problems occur, users may lose access to important online services.</p>
+    <h3>Common Network Problems</h3>
+    <ul><li>No internet connection.</li><li>Slow Wi-Fi speed.</li><li>Unable to connect to a network.</li><li>Network settings errors.</li></ul>
+    <h3>Problem: No Internet Connection</h3>
+    <h4>Possible Causes</h4>
+    <ul><li>Router problems.</li><li>Damaged cables.</li><li>Incorrect network settings.</li><li>Internet service interruption.</li></ul>
+    <h4>Solutions</h4>
+    <ul><li>Restart the router.</li><li>Check network cables.</li><li>Reconnect Wi-Fi.</li><li>Check device network settings.</li></ul>
+    <h3>Problem: Slow Wi-Fi Connection</h3>
+    <p>Slow Wi-Fi can happen when many devices are connected, the signal is weak, or the router needs maintenance.</p>
+    <h4>Solutions</h4>
+    <ul><li>Move closer to the router.</li><li>Remove unused connections.</li><li>Restart networking devices.</li><li>Update router firmware.</li></ul>
+    <button class="action" onclick="startQuiz(4)">📝 Take Lesson 4 Quiz</button>
+  </div>
+
+  <div class="card lesson" id="lesson5">
+    <h2>Lesson 5: Software Troubleshooting</h2>
+    <p>Software troubleshooting involves solving problems related to applications, programs, operating systems, and files.</p>
+    <p>Software problems are usually caused by errors, corrupted files, outdated versions, compatibility issues, or incorrect settings.</p>
+    <h3>Common Software Problems</h3>
+    <h4>1. Application Cannot Open</h4>
+    <p>A program may fail to open because its files are damaged, the software is outdated, or the computer does not meet system requirements.</p>
+    <h3>Solutions</h3>
+    <ul><li>Restart the application.</li><li>Restart the computer.</li><li>Update the software.</li><li>Reinstall the application.</li></ul>
+    <h4>2. Software Freezing or Crashing</h4>
+    <p>Programs may stop responding because of software bugs, low memory, corrupted files, or conflicts with other programs.</p>
+    <h3>Solutions</h3>
+    <ul><li>Close unnecessary applications.</li><li>Check available memory.</li><li>Install updates.</li><li>Check software compatibility.</li></ul>
+    <h3>Software Maintenance Tips</h3>
+    <ul><li>Keep programs updated.</li><li>Download software only from trusted sources.</li><li>Remove unused applications.</li><li>Regularly backup important files.</li></ul>
+    <button class="action" onclick="startQuiz(5)">📝 Take Lesson 5 Quiz</button>
+  </div>
+
+  <div class="card lesson" id="lesson6">
+    <h2>Lesson 6: Operating System Troubleshooting</h2>
+    <p>An Operating System (OS) is the main software that manages computer hardware, files, applications, and user interaction. Examples include Windows, macOS, Linux, Android, and iOS.</p>
+    <p>When an operating system experiences problems, the whole computer may become unstable. Learning OS troubleshooting helps users repair common problems and maintain system performance.</p>
+    <h3>Common Operating System Problems</h3>
+    <ul><li>Computer fails to start properly.</li><li>System freezes frequently.</li><li>Updates fail to install.</li><li>Drivers stop working.</li><li>System becomes slow.</li></ul>
+    <h3>1. Startup Problems</h3>
+    <p>Startup problems happen when the computer cannot load the operating system correctly, because of corrupted system files, failed updates, malware, or driver errors.</p>
+    <h4>Solutions</h4>
+    <ul><li>Restart the computer.</li><li>Use recovery tools.</li><li>Repair system files.</li><li>Install important updates.</li></ul>
+    <h3>2. Driver Problems</h3>
+    <p>Drivers allow the operating system to communicate with hardware devices such as printers, graphics cards, and network adapters.</p>
+    <h4>Solutions</h4>
+    <ul><li>Update device drivers.</li><li>Reinstall damaged drivers.</li><li>Check hardware compatibility.</li></ul>
+    <button class="action" onclick="startQuiz(6)">📝 Take Lesson 6 Quiz</button>
+  </div>
+
+  <div class="card lesson" id="lesson7">
+    <h2>Lesson 7: Mobile Device Troubleshooting</h2>
+    <p>Mobile devices such as smartphones and tablets are important technology tools used for communication, education, and work. Like computers, they can experience hardware, software, and connection problems.</p>
+    <h3>Common Mobile Device Problems</h3>
+    <ul><li>Slow performance.</li><li>Battery issues.</li><li>Application crashes.</li><li>Storage problems.</li><li>Network connection problems.</li></ul>
+    <h3>1. Slow Mobile Performance</h3>
+    <p>A mobile device may become slow because of full storage, too many background applications, outdated software, or unnecessary files.</p>
+    <h4>Solutions</h4>
+    <ul><li>Delete unnecessary files.</li><li>Remove unused applications.</li><li>Restart the device.</li><li>Update the operating system.</li></ul>
+    <h3>2. Battery Problems</h3>
+    <p>Battery problems can happen because of old batteries, overheating, excessive usage, or incorrect charging habits.</p>
+    <h4>Solutions</h4>
+    <ul><li>Monitor battery usage.</li><li>Close unused applications.</li><li>Avoid extreme temperatures.</li><li>Use proper chargers.</li></ul>
+    <h3>3. Application Problems</h3>
+    <p>Applications may crash because of bugs, outdated versions, or insufficient storage.</p>
+    <h4>Solutions</h4>
+    <ul><li>Update the application.</li><li>Clear application data.</li><li>Reinstall the application.</li></ul>
+    <button class="action" onclick="startQuiz(7)">📝 Take Lesson 7 Quiz</button>
+  </div>
+
+  <div class="card lesson" id="lesson8">
+    <h2>Lesson 8: Cybersecurity Troubleshooting</h2>
+    <p>Cybersecurity troubleshooting focuses on identifying and solving security problems that affect computers, networks, and personal information.</p>
+    <p>Security problems can result in stolen information, damaged files, unauthorized access, and system failures. Every technology user should understand basic cybersecurity.</p>
+    <h3>Common Cybersecurity Threats</h3>
+    <ul><li>Viruses.</li><li>Malware.</li><li>Phishing attacks.</li><li>Weak passwords.</li><li>Unauthorized access.</li></ul>
+    <h3>1. Virus and Malware Problems</h3>
+    <p>Malware is harmful software designed to damage systems, steal information, or affect computer performance.</p>
+    <h4>Signs of Malware Infection</h4>
+    <ul><li>Computer becomes unusually slow.</li><li>Unknown applications appear.</li><li>Unexpected advertisements appear.</li><li>Files become corrupted.</li></ul>
+    <h4>Solutions</h4>
+    <ul><li>Run antivirus scanning.</li><li>Remove suspicious programs.</li><li>Avoid unsafe downloads.</li><li>Update security software.</li></ul>
+    <h3>2. Account Security</h3>
+    <p>Protecting accounts prevents unauthorized users from accessing personal information.</p>
+    <h4>Security Practices</h4>
+    <ul><li>Use strong passwords.</li><li>Enable two-factor authentication.</li><li>Avoid sharing passwords.</li><li>Change passwords regularly.</li><li>Be careful with suspicious messages.</li></ul>
+    <button class="action" onclick="startQuiz(8)">📝 Take Lesson 8 Quiz</button>
+  </div>
+
+  <div class="card lesson" id="lesson9">
+    <h2>Lesson 9: Troubleshooting Tools and Techniques</h2>
+    <p>ICT technicians use different tools and methods to identify, test, and solve technology problems. These tools help make troubleshooting faster, easier, and more accurate.</p>
+    <p>A professional technician does not randomly change parts or settings. Instead, they use proper tools, observe symptoms, test possible causes, and apply solutions carefully.</p>
+    <h3>Important Troubleshooting Tools</h3>
+    <h4>1. Task Manager</h4>
+    <p>Task Manager is a system tool that shows running programs, CPU usage, memory usage, disk activity, and system performance.</p>
+    <h4>2. Device Manager</h4>
+    <p>Device Manager allows users to view and manage hardware devices connected to the computer, commonly used to check drivers and hardware problems.</p>
+    <h4>3. Command Prompt</h4>
+    <p>Command Prompt is a text-based tool used for advanced troubleshooting tasks such as testing networks, repairing files, and analyzing system problems.</p>
+    <h4>4. Antivirus Tools</h4>
+    <p>Antivirus programs detect, prevent, and remove harmful software that can damage computer systems.</p>
+    <h4>5. Network Tools</h4>
+    <p>Network tools help technicians test internet connections, identify communication problems, and analyze network performance.</p>
+    <h3>Professional Troubleshooting Techniques</h3>
+    <ul><li>Ask questions and gather information.</li><li>Check the simplest possible causes first.</li><li>Test one solution at a time.</li><li>Record problems and solutions.</li><li>Verify that the problem is completely fixed.</li></ul>
+    <button class="action" onclick="startQuiz(9)">📝 Take Lesson 9 Quiz</button>
+  </div>
+
+  <div class="card lesson" id="lesson10">
+    <h2>Lesson 10: Practical Troubleshooting Activities</h2>
+    <p>Practical activities allow students to apply troubleshooting knowledge to realistic technology situations — observing symptoms, finding possible causes, testing solutions, and confirming results.</p>
+    <h3>Activity 1: Computer Cannot Connect to Wi-Fi</h3>
+    <p><b>Problem:</b> A laptop cannot access the internet even though other devices are connected.</p>
+    <p><b>Solution:</b> Check Wi-Fi settings, restart the router, reconnect the device, and verify network configuration.</p>
+    <h3>Activity 2: Printer Does Not Print</h3>
+    <p><b>Possible Causes:</b> No paper supply, empty ink cartridge, disconnected cable, driver problems.</p>
+    <p><b>Solution:</b> Check printer connections, refill supplies, restart the printer, and update printer drivers.</p>
+    <h3>Activity 3: Program Keeps Crashing</h3>
+    <p><b>Possible Causes:</b> Software bugs, low memory, corrupted files, compatibility issues.</p>
+    <p><b>Solution:</b> Restart the program, update the software, check system requirements, reinstall the application.</p>
+    <h3>Activity 4: Computer Overheating</h3>
+    <p><b>Possible Causes:</b> Dust buildup, blocked ventilation, broken cooling fan.</p>
+    <p><b>Solution:</b> Clean computer vents, improve airflow, check cooling system.</p>
+    <h3>Congratulations!</h3>
+    <p>You have completed all ICT troubleshooting lessons. Continue practicing through the quizzes.</p>
+    <button class="action" onclick="startQuiz(10)">📝 Take Lesson 10 Quiz</button>
+  </div>
+
+  <div class="card">
+    <h2>Lesson Navigation <button class="bookmark-star" id="bookmarkStar" onclick="toggleBookmark()" title="Bookmark this lesson">☆</button></h2>
+    <button class="action secondary" onclick="previousLesson()">⬅ Previous</button>
+    <button class="action secondary" onclick="nextLesson()">Next ➡</button>
+    <button class="action" onclick="markLessonComplete()">✅ Mark as Complete</button>
+    <h3 id="lessonStatus"></h3>
+  </div>
+  <div class="card">
+    <h2>📝 My Notes — <span id="notesLessonLabel">Lesson 1</span></h2>
+    <textarea id="lessonNotesArea" placeholder="Write notes for this lesson…" oninput="saveLessonNote(this.value)"></textarea>
+  </div>
+</section>
+
+<!-- ========================== GUIDE ========================== -->
+<section id="guide" class="hidden">
+  <div class="card">
+    <span class="section-eyebrow">Reference</span>
+    <h2>Interactive ICT Troubleshooting Guide</h2>
+    <p>This guide helps users understand common technology problems and provides simple troubleshooting steps.</p>
+    <p>Before fixing any problem, remember the professional troubleshooting process:</p>
+    <ul>
+      <li><b>Observe:</b> Identify what is happening.</li>
+      <li><b>Analyze:</b> Find possible causes.</li>
+      <li><b>Test:</b> Try safe solutions.</li>
+      <li><b>Fix:</b> Apply the correct solution.</li>
+      <li><b>Verify:</b> Make sure the problem is solved.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h2>Choose a Problem</h2>
+    <button class="action" onclick="solveProblem('computer')">💻 Computer Problem</button>
+    <button class="action" onclick="solveProblem('internet')">🌐 Internet Problem</button>
+    <button class="action" onclick="solveProblem('software')">📱 Software Problem</button>
+    <button class="action" onclick="solveProblem('security')">🔒 Security Problem</button>
+    <div id="guideAnswer">Select a problem to view the solution.</div>
+  </div>
+  <div class="card">
+    <h2>Important Troubleshooting Tips</h2>
+    <ul>
+      <li>Always check simple causes first.</li>
+      <li>Do not change settings without understanding them.</li>
+      <li>Create backups before major changes.</li>
+      <li>Keep software and security tools updated.</li>
+      <li>Ask for professional help when necessary.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========================== AI ASSISTANT ========================== -->
+<section id="ai" class="hidden">
+  <div class="card">
+    <span class="section-eyebrow">Assistant</span>
+    <h2>🤖 ICT Learning AI Assistant</h2>
+    <p>Ask questions about computers, networks, software, hardware, cybersecurity, and troubleshooting.</p>
+    <p>Example questions:</p>
+    <ul>
+      <li>Why is my computer slow?</li>
+      <li>How do I fix no internet connection?</li>
+      <li>What is RAM?</li>
+      <li>How can I protect my computer from viruses?</li>
+    </ul>
+    <input id="aiQuestion" type="text" placeholder="Ask your ICT question..." onkeydown="if(event.key==='Enter')askAI()">
+    <br><br>
+    <button class="action" onclick="askAI()">Ask AI</button>
+    <div id="aiAnswer">AI response will appear here.</div>
+  </div>
+</section>
+
+<!-- ========================== FLASHCARDS ========================== -->
+<section id="flashcards" class="hidden">
+  <div class="card">
+    <span class="section-eyebrow">Practice</span>
+    <h2>🃏 ICT Flashcards</h2>
+    <p>Flip each card to check the answer, then mark it as learned. Shuffle any time you want a new order.</p>
+    <div class="flash-wrap">
+      <div class="flash-card" id="flashCard" onclick="flipFlashcard()">
+        <div class="flash-face front"><span id="flashFront">Loading…</span><span class="flash-hint">Tap to flip</span></div>
+        <div class="flash-face back"><span id="flashBack"></span><span class="flash-hint">Tap to flip back</span></div>
+      </div>
+    </div>
+    <div class="flash-controls">
+      <button class="action secondary" onclick="prevFlashcard()">⬅ Previous</button>
+      <button class="action" onclick="markFlashcardLearned()">✅ Mark Learned</button>
+      <button class="action secondary" onclick="nextFlashcard()">Next ➡</button>
+      <button class="action secondary" onclick="shuffleFlashcards()">🔀 Shuffle</button>
+    </div>
+    <p class="flash-counter" id="flashCounter"></p>
+  </div>
+</section>
+
+<!-- ========================== PROFILE ========================== -->
+<section id="profile" class="hidden">
+  <div class="card">
+    <span class="section-eyebrow">Student</span>
+    <h2>👤 Student Profile</h2>
+    <p>Update your display name and see a full snapshot of your ICT LearningHub journey.</p>
+    <label style="display:block; font-size:13px; color:var(--ink-dim); margin-bottom:6px;">Display name</label>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <input id="profileNameInput" type="text" placeholder="Your name" style="flex:1; min-width:180px; padding:12px 16px; border-radius:12px; border:1px solid rgba(0,212,255,.3); background:rgba(255,255,255,.05); color:var(--ink); font-size:15px;">
+      <button class="action" onclick="saveProfileName()">Save Name</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📊 Snapshot</h2>
+    <div class="stat-strip" id="profileStats"></div>
+    <div class="xp-bar-label"><span id="profileLevelLabel">Level 1</span><span id="profileXpLabel">0 / 100 XP</span></div>
+    <div class="xp-bar-outer"><div class="xp-bar-inner" id="profileXpBar"></div></div>
+  </div>
+
+  <div class="card">
+    <h2>🏅 Achievements</h2>
+    <div class="badge-grid" id="profileBadges"></div>
+  </div>
+
+  <div class="card">
+    <h2>🔖 Bookmarked Lessons</h2>
+    <div id="profileBookmarks"><p>No bookmarks yet — star a lesson to save it here.</p></div>
+  </div>
+
+  <div class="card">
+    <h2>📝 My Notes</h2>
+    <div id="profileNotes"><p>No notes yet — write one from any lesson page.</p></div>
+  </div>
+
+  <div class="card" id="certificateCard" style="display:none;">
+    <h2>🎓 Your Certificate</h2>
+    <p>You've completed every lesson with a passing score. Your certificate is ready.</p>
+    <button class="action" onclick="showPage('certificate')">View Certificate</button>
+  </div>
+</section>
+
+<!-- ========================== CERTIFICATE ========================== -->
+<section id="certificate" class="hidden">
+  <div class="certificate" id="certificateBody">
+    <span class="cert-brand">ICT⚡LEARNINGHUB</span>
+    <h1>Certificate of Completion</h1>
+    <p>This certifies that</p>
+    <div class="cert-name" id="certName">Student Name</div>
+    <p>has successfully completed the <b>ICT LearningHub Troubleshooting Course</b>,<br>covering hardware, software, networking, mobile devices, and cybersecurity fundamentals.</p>
+    <p id="certDate" style="margin-top:20px;"></p>
+    <p class="cert-id" id="certId"></p>
+  </div>
+  <div class="card" style="text-align:center;">
+    <button class="action" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <button class="action secondary" onclick="showPage('profile')">⬅ Back to Profile</button>
+  </div>
+</section>
+
+<!-- ========================== NOTES & BOOKMARKS (embedded in lessons) ========================== -->
+
+<!-- ========================== QUIZ ========================== -->
+<section id="quiz" class="hidden">
+  <div class="card">
+    <span class="section-eyebrow">Assessment</span>
+    <h2>📝 ICT Quiz</h2>
+    <p>Pick a lesson to test what you've learned. Each quiz has 6 questions.</p>
+    <div class="lesson-picker" id="quizPicker"></div>
+    <h3 id="quizTitle">Select a lesson above</h3>
+    <form id="quizForm">
+      <div id="quizQuestions"></div>
+      <button type="button" class="action" onclick="submitQuiz()">Submit Quiz</button>
+    </form>
+    <div id="quizResult"></div>
+    <div id="quizReviewWrap"></div>
+  </div>
+</section>
+
+<!-- ========================== PROGRESS ========================== -->
+<section id="progress" class="hidden">
+  <div class="card">
+    <span class="section-eyebrow">Your Progress</span>
+    <h2 id="progressGreeting">📊 Your Progress</h2>
+    <p id="progressSub">Log in to save your progress across visits on this device.</p>
+    <div class="stat-strip" id="progressStats"></div>
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+    <table class="progress-table" id="progressTable">
+      <thead><tr><th>Lesson</th><th>Best Score</th><th>Status</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ========================== FAQ ========================== -->
+<section id="faq" class="hidden">
+  <div class="card">
+    <span class="section-eyebrow">Help</span>
+    <h2>❓ Frequently Asked Questions</h2>
+    <p>Find answers to common questions about ICT LearningHub and how to use the platform.</p>
+  </div>
+  <div class="card faq-box"><h3>1. What is ICT LearningHub?</h3><p>ICT LearningHub is an educational platform that helps students learn Information and Communication Technology through lessons, quizzes, and AI assistance.</p></div>
+  <div class="card faq-box"><h3>2. Who can use this website?</h3><p>The website is designed for students, beginners, and anyone interested in learning computer technology and digital skills.</p></div>
+  <div class="card faq-box"><h3>3. How should I start learning?</h3><p>Start with Lesson 1, follow the lessons in order, complete each lesson's quiz, and check your Progress page.</p></div>
+  <div class="card faq-box"><h3>4. Can the AI Assistant answer any question?</h3><p>The AI Assistant is designed to help with ICT-related questions such as hardware, software, networking, cybersecurity, and troubleshooting.</p></div>
+  <div class="card faq-box"><h3>5. Does my progress save?</h3><p>Yes. Once you log in, your lesson and quiz progress is saved in your browser's local storage on this device.</p></div>
+  <div class="card faq-box"><h3>6. Why is learning ICT important?</h3><p>ICT skills are useful in education, careers, communication, problem-solving, and everyday technology use.</p></div>
+  <div class="card">
+    <h2>💡 Learning Tips</h2>
+    <ul>
+      <li>Study lessons carefully before taking quizzes.</li>
+      <li>Practice troubleshooting using real examples.</li>
+      <li>Ask the AI Assistant when you need guidance.</li>
+      <li>Keep improving your digital skills.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========================== ADMIN LOGIN MODAL ========================== -->
+<div class="admin-modal" id="adminModal" onclick="if(event.target===this)closeAdminLogin()">
+  <div class="admin-modal-box">
+    <h3>🛠 Admin Login</h3>
+    <p>Enter the admin password to manage tutorial links and learner data.</p>
+    <input id="adminPass" class="admin-input" type="password" placeholder="Admin password" autocomplete="off" onkeydown="if(event.key==='Enter')submitAdminLogin()">
+    <div class="admin-msg err" id="adminLoginErr"></div>
+    <button class="pill-cta primary" style="width:100%; margin-bottom:10px;" onclick="submitAdminLogin()">Unlock Admin Panel</button>
+    <button class="pill-cta ghost" style="width:100%;" onclick="closeAdminLogin()">Cancel</button>
+  </div>
+</div>
+
+<!-- ========================== ADMIN PANEL ========================== -->
+<section id="admin" class="hidden">
+  <div class="card">
+    <span class="section-eyebrow">Control Panel</span>
+    <h2>🛠 Admin Panel</h2>
+    <p>Manage the video tutorials shown inside each lesson, review learner data for this device, and change the admin password. Changes apply instantly and are stored in this browser.</p>
+    <button class="action secondary" onclick="adminLogout()">🔒 Lock Admin &amp; Exit</button>
+  </div>
+
+  <div class="card">
+    <h2>🎬 Tutorial Links</h2>
+    <p>Pick a lesson, then add, edit, test or remove its YouTube links. Paste a direct video link (<b>youtube.com/watch?v=…</b> or <b>youtu.be/…</b>) to give learners a "Play here" player, or paste any YouTube search/playlist link. Only YouTube links are accepted.</p>
+    <div class="lesson-picker" id="adminLessonPicker"></div>
+    <h3 id="adminLessonTitle"></h3>
+    <div id="adminTutList"></div>
+    <div class="admin-add">
+      <h4>Add a new link</h4>
+      <input id="adminNewTitle" class="admin-input" type="text" placeholder="Title (e.g. How to reseat RAM)">
+      <input id="adminNewUrl" class="admin-input" type="text" placeholder="YouTube link (https://www.youtube.com/watch?v=…)" onkeydown="if(event.key==='Enter')adminAddTutorial()">
+      <div class="admin-msg" id="adminTutMsg"></div>
+      <div class="admin-actions">
+        <button class="action" onclick="adminAddTutorial()">＋ Add Link</button>
+        <button class="action secondary" onclick="adminResetTutorials()">↺ Reset All Lessons to Defaults</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>👥 Learner Data (this device)</h2>
+    <div id="adminLearner"></div>
+    <div class="admin-actions">
+      <button class="action" onclick="adminExport()">⬇ Export Data (JSON)</button>
+      <button class="action danger" onclick="adminResetProgress()">🗑 Reset Learner Progress</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔑 Change Admin Password</h2>
+    <input id="adminPwCur" class="admin-input" type="password" placeholder="Current password" autocomplete="off">
+    <input id="adminPwNew" class="admin-input" type="password" placeholder="New password (min. 6 characters)" autocomplete="off">
+    <input id="adminPwNew2" class="admin-input" type="password" placeholder="Confirm new password" autocomplete="off" onkeydown="if(event.key==='Enter')adminChangePassword()">
+    <div class="admin-msg" id="adminPwMsg"></div>
+    <button class="action" onclick="adminChangePassword()">Update Password</button>
+  </div>
+</section>
+
+<footer>
+  <p><b>ICT LearningHub</b> — Interactive Learning Platform for ICT Troubleshooting</p>
+  <p>Built for students who want to understand technology, not just use it.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+
+/* ==========================================================
+   PAGE NAVIGATION
+   ========================================================== */
+const NAV_PAGES = ['home','lessons','guide','quiz','flashcards','progress','ai','profile','about','faq'];
+function showPage(page){
+  if(page === 'admin' && !isAdmin()){ openAdminLogin(); return; }
+  document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(page).classList.remove('hidden');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const idx = NAV_PAGES.indexOf(page);
+  const btns = document.querySelectorAll('.nav-btn');
+  if(btns[idx]) btns[idx].classList.add('active');
+  if(page === 'progress') renderProgress();
+  if(page === 'flashcards') renderFlashcard();
+  if(page === 'profile') renderProfile();
+  if(page === 'certificate') renderCertificate();
+  if(page === 'admin') renderAdmin();
+  document.getElementById('searchResults').classList.remove('show');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+showPage('home');
+
+/* ==========================================================
+   SCROLL-TRIGGERED MOTION for .reveal elements (feature cards)
+   ========================================================== */
+(function initReveal(){
+  const targets = document.querySelectorAll('.reveal');
+  if(!targets.length) return;
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:.2, rootMargin:'0px 0px -40px 0px'});
+  targets.forEach(t=>io.observe(t));
+})();
+
+/* ==========================================================
+   LESSON NAVIGATION
+   ========================================================== */
+let currentLesson = 1;
+function openLesson(number){
+  currentLesson = number;
+  document.querySelectorAll('.lesson').forEach(l=>l.classList.remove('visible'));
+  const el = document.getElementById('lesson'+number);
+  if(el) el.classList.add('visible');
+  document.getElementById('notesLessonLabel').textContent = 'Lesson ' + number;
+  document.getElementById('lessonNotesArea').value = getLessonNote(number);
+  refreshBookmarkStar();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function nextLesson(){
+  if(currentLesson<10){ currentLesson++; openLesson(currentLesson); }
+  else{ document.getElementById('lessonStatus').innerHTML = '🎉 You completed all lessons!'; }
+}
+function previousLesson(){
+  if(currentLesson>1){ currentLesson--; openLesson(currentLesson); }
+}
+function markLessonComplete(){
+  const progress = getProgress();
+  const key = 'c' + currentLesson;
+  if(!progress[key]){
+    progress[key] = true;
+    localStorage.setItem('ictProgress', JSON.stringify(progress));
+    addXP(15, 'Completed Lesson ' + currentLesson);
+    document.getElementById('lessonStatus').innerHTML = '✅ Lesson ' + currentLesson + ' marked complete!';
+    checkBadges();
+  } else {
+    document.getElementById('lessonStatus').innerHTML = '✅ Already marked complete.';
+  }
+  buildLessonPills();
+}
+function buildLessonPills(){
+  const wrap = document.getElementById('lessonPills');
+  const progress = getProgress();
+  let html='';
+  for(let i=1;i<=10;i++){
+    const done = progress[i] && progress[i].percent>=70;
+    html += `<button class="lesson-pill${done?' done':''}" onclick="openLesson(${i})">Lesson ${i}</button>`;
+  }
+  wrap.innerHTML = html;
+}
+buildLessonPills();
+
+/* ==========================================================
+   GUIDE
+   ========================================================== */
+function solveProblem(problem){
+  const answers = {
+    computer: 'Check power connections, restart the device, inspect hardware components, and check for error messages.',
+    internet: 'Restart your router, check cables, reconnect Wi-Fi, and verify network settings.',
+    software: 'Restart the application, update software, check compatibility, or reinstall the program.',
+    security: 'Run antivirus scans, remove suspicious files, update security software, and use strong passwords.'
+  };
+  document.getElementById('guideAnswer').innerHTML = answers[problem] || '';
+}
+
+/* ==========================================================
+   ICT AI ASSISTANT — local keyword-scored knowledge base.
+   No external API calls; matches your question against many
+   ICT topics and returns the best-scoring answer.
+   ========================================================== */
+const aiKnowledge = [
+  {kw:['hi','hello','hey','good morning','good afternoon'], a:"Hello! 👋 I'm your ICT learning assistant. Ask me about computers, networks, software, hardware, mobile devices, operating systems, or cybersecurity."},
+  {kw:['thank','thanks','thank you'], a:"You're welcome! Feel free to ask another ICT question any time."},
+  {kw:['bye','goodbye','see you'], a:"Goodbye! Come back any time you need help with troubleshooting."},
+  {kw:['what can you do','help me','what do you know','who are you'], a:"I can answer questions about computer, hardware, software, network, mobile, operating system, and cybersecurity troubleshooting — try asking things like 'why is my Wi-Fi slow' or 'what is RAM'."},
+  {kw:['what is troubleshoot','define troubleshoot','troubleshooting mean'], a:"Troubleshooting is the process of identifying a problem, finding its possible causes, testing solutions, applying the correct fix, and documenting what worked."},
+  {kw:['what is ict','define ict'], a:"ICT stands for Information and Communication Technology — the computers, networks, software, and devices used to create, store, and share information."},
+  {kw:['computer wont turn on','computer not turning on','pc wont start','laptop wont start','wont power on','not turning on'], a:"Check the power cable and outlet, try a different outlet, check the battery if it's a laptop, and inspect for loose or damaged hardware connections."},
+  {kw:['slow','lag','laggy','sluggish'], a:"A slow computer is often caused by too many running programs, low storage space, malware, or outdated hardware. Try closing unused apps, freeing up storage, and scanning for malware."},
+  {kw:['ram','memory'], a:"RAM (Random Access Memory) is temporary memory your computer uses to store data for programs that are currently running. Problems with RAM can cause freezing, crashing, or failure to start. More RAM generally improves multitasking."},
+  {kw:['overheat','overheating','too hot','fan noise'], a:"Overheating is usually caused by dust blocking vents, a broken cooling fan, or poor airflow. Clean the vents, check the fan, and make sure the device has room to breathe."},
+  {kw:['blue screen','crash','freeze','freezing','not responding','hangs'], a:"Freezing or crashing can be caused by software bugs, low memory, corrupted files, or driver conflicts. Try restarting, closing unused programs, and updating your software and drivers."},
+  {kw:['internet','wifi','wi-fi','no connection','cant connect','can t connect'], a:"For internet problems: restart your router, check that cables are connected, reconnect to Wi-Fi, and check your device's network settings."},
+  {kw:['slow wifi','slow internet','weak signal'], a:"Slow Wi-Fi can happen with too many connected devices, a weak signal, or an outdated router. Try moving closer to the router, disconnecting unused devices, and updating the router's firmware."},
+  {kw:['router','modem'], a:"Routers manage your network traffic. If you're having connection issues, restart the router, check its cables, and make sure its firmware is up to date."},
+  {kw:['software crash','program crash','app crash','app wont open','application wont open','wont open'], a:"An application that won't open or keeps crashing may have damaged files, be outdated, or conflict with another program. Try restarting it, updating it, or reinstalling it."},
+  {kw:['update','updates'], a:"Keeping your operating system and applications updated fixes bugs, closes security gaps, and improves compatibility. Always download updates from trusted, official sources."},
+  {kw:['operating system','windows','macos','linux','os problem'], a:"The operating system manages your hardware, files, and applications. Startup problems are often caused by corrupted system files, failed updates, or driver errors — recovery tools can often help."},
+  {kw:['driver','drivers'], a:"Drivers let your operating system communicate with hardware like printers or graphics cards. If a device isn't working right, try updating or reinstalling its driver."},
+  {kw:['mobile','phone','smartphone','tablet'], a:"Mobile devices can face slow performance, battery issues, app crashes, and storage problems — similar to computers. Deleting unused files and apps and keeping the OS updated usually helps."},
+  {kw:['battery','charging'], a:"Battery problems are often caused by age, overheating, or heavy background app usage. Use the proper charger, avoid extreme temperatures, and close apps you're not using."},
+  {kw:['virus','malware','infected','infection'], a:"Malware can slow your device, show unexpected ads, or install unknown apps. Run an antivirus scan, remove suspicious programs, avoid unsafe downloads, and keep your security software updated."},
+  {kw:['phishing','scam email','suspicious link'], a:"Phishing tries to trick you into giving up sensitive information, often through fake emails or links. Never click suspicious links, and verify a sender before entering personal details."},
+  {kw:['password','account security','hack','hacked'], a:"Use strong, unique passwords for each account, enable two-factor authentication where available, and never share your passwords or click unknown links."},
+  {kw:['two-factor','2fa','authentication'], a:"Two-factor authentication adds a second security step (like a code sent to your phone) beyond your password, making it much harder for someone else to access your account."},
+  {kw:['backup','back up','lost files','lost data'], a:"Regularly backing up important files protects you from data loss caused by hardware failure, malware, or accidental deletion. Store backups in more than one place if you can."},
+  {kw:['task manager'], a:"Task Manager lets you view running programs and how much CPU, memory, and disk they're using — useful for finding what's slowing your computer down."},
+  {kw:['device manager'], a:"Device Manager lets you view and manage the hardware connected to your computer, and is commonly used to check for driver problems."},
+  {kw:['command prompt','terminal','cmd'], a:"Command Prompt (or Terminal) is a text-based tool used for advanced tasks like checking network connections, repairing files, and diagnosing system problems."},
+  {kw:['antivirus'], a:"Antivirus software detects, blocks, and removes malicious software. Keep it updated and run scans regularly."},
+  {kw:['printer','printing','wont print'], a:"If a printer won't print, check for paper, ink or toner levels, the cable or Wi-Fi connection, and make sure the correct printer driver is installed."},
+  {kw:['network','networking'], a:"A network lets devices communicate and share information. Common problems include no connection, slow speeds, and misconfigured settings — most are fixed by restarting equipment or checking settings."},
+  {kw:['hardware'], a:"Hardware refers to a computer's physical components — like the motherboard, RAM, storage, and power supply. Hardware troubleshooting focuses on solving problems with these physical parts."},
+  {kw:['software'], a:"Software refers to programs and applications that run on a device. Software troubleshooting focuses on fixing errors, crashes, and compatibility problems in these programs."},
+  {kw:['cybersecurity','security'], a:"Cybersecurity is about protecting systems, networks, and information from threats like malware, phishing, and unauthorized access — using tools like antivirus software, strong passwords, and safe browsing habits."}
+];
+
+function findBestAnswer(question){
+  const q = question.toLowerCase();
+  let best = null, bestScore = 0;
+  aiKnowledge.forEach(entry=>{
+    let score = 0;
+    entry.kw.forEach(k=>{ if(q.includes(k)) score += k.split(' ').length; });
+    if(score > bestScore){ bestScore = score; best = entry; }
+  });
+  if(best) return best.a;
+  return "I'm not sure about that one yet. I can help with topics like computer troubleshooting, hardware, software, networks, mobile devices, operating systems, and cybersecurity — try rephrasing your question, or take a look at the Lessons page.";
+}
+
+function askAI(){
+  const input = document.getElementById('aiQuestion');
+  const question = input.value.trim();
+  if(!question){ input.focus(); return; }
+  document.getElementById('aiAnswer').innerHTML = findBestAnswer(question);
+}
+
+/* ==========================================================
+   QUIZ DATA — 6 questions per lesson, answers as letters
+   ========================================================== */
+const quizData = {
+  1:[
+    ["What does ICT troubleshooting mean?",["Identifying and solving technology problems","Deleting programs","Buying new devices","Ignoring errors"],"A","ICT troubleshooting is the process of figuring out what's wrong with technology and applying a fix to solve it — not deleting things, buying new gear, or ignoring the issue."],
+    ["What is the first step in troubleshooting?",["Apply the solution","Identify the problem","Document the solution","Test solutions"],"B","You can't fix something until you know what's actually wrong, so identifying the problem always comes before applying or testing any solution."],
+    ["Why is documenting a solution important?",["It wastes time","It helps solve similar problems later","It deletes files","It is not necessary"],"B","Writing down what worked creates a record you (or someone else) can reuse if the same or a similar problem comes up again."],
+    ["Effective troubleshooting requires:",["Random guessing","Logical, step-by-step thinking","Ignoring symptoms","Replacing all parts"],"B","Good troubleshooting follows a logical, methodical process rather than guessing or replacing parts blindly."],
+    ["A key benefit of learning troubleshooting is:",["Becoming dependent on repair shops","Reducing unnecessary repair costs","Avoiding technology entirely","Slower problem solving"],"B","Knowing how to troubleshoot lets you fix simple issues yourself, saving money you'd otherwise spend on repairs."],
+    ["What should happen after testing a possible solution?",["Immediately buy a new device","Check whether the problem is actually resolved","Delete all data","Ignore the results"],"B","After trying a fix, you need to verify it actually resolved the problem — otherwise you can't be sure it worked."]
+  ],
+  2:[
+    ["A common cause of a computer not turning on is:",["A loose power cable","Too many browser tabs","A slow printer","High volume settings"],"A","A computer needs a solid power connection to start up, so a loose or disconnected power cable is a very common culprit."],
+    ["Which is a typical cause of slow computer performance?",["Too many running applications","A clean desktop","An updated OS","A wired mouse"],"A","Running many programs at once uses up CPU and memory, which slows everything else down."],
+    ["What should you check first if a laptop won't power on?",["The Wi-Fi password","Power connections and battery","The desktop wallpaper","The printer"],"B","If a laptop won't turn on at all, the power source and battery are the first things to rule out before looking at anything else."],
+    ["A good computer maintenance habit is:",["Ignoring software updates","Installing unknown programs","Keeping the OS updated","Never restarting the computer"],"C","Regularly updating the operating system patches bugs and security holes, which is a core maintenance habit."],
+    ["Malware infection can be addressed by:",["Restarting only","Scanning for malware and removing threats","Unplugging the monitor","Increasing screen brightness"],"B","A malware scan actively finds and removes the infection — restarting alone won't get rid of it."],
+    ["Backing up files protects against:",["Data loss","Faster typing","Battery drain","Wi-Fi issues"],"A","Backups exist specifically so your files survive if something goes wrong — that protects against data loss, not typing speed or battery life."]
+  ],
+  3:[
+    ["RAM problems can cause a computer to:",["Print faster","Freeze or fail to start","Change its wallpaper","Improve battery life"],"B","Faulty or failing RAM disrupts how the system loads and runs programs, which can cause freezing or a failure to start."],
+    ["A likely cause of RAM issues is:",["Loose RAM connection","Too many browser bookmarks","Weak Wi-Fi signal","Outdated antivirus"],"A","If a RAM stick isn't seated firmly in its slot, the system can experience memory errors or fail to boot."],
+    ["Overheating is often caused by:",["Dust blocking ventilation","Using a mouse","Closing programs","Software updates"],"A","Dust buildup blocks the vents and fans, trapping heat inside the case and causing overheating."],
+    ["A solution for overheating is to:",["Block the vents","Clean vents and improve airflow","Increase brightness","Disable the keyboard"],"B","Clearing dust from the vents and improving airflow lets heat escape properly, cooling the system down."],
+    ["Hardware troubleshooting focuses on problems with:",["Physical components like RAM and motherboard","Only internet browsers","Email accounts","Social media apps"],"A","Hardware troubleshooting deals with the physical parts of a computer, such as RAM, the motherboard, and other components."],
+    ["Which is a common hardware component prone to issues?",["RAM","Wallpaper","Bookmark bar","Search engine"],"A","RAM is a physical hardware component and one that commonly develops faults over time — the others aren't hardware at all."]
+  ],
+  4:[
+    ["A common network problem is:",["No internet connection","Bright screen","Slow typing","Loud speakers"],"A","Losing internet connectivity is one of the most frequent problems people run into with networking."],
+    ["What is a recommended first step for no internet connection?",["Restart the router","Buy a new computer","Delete all files","Change the wallpaper"],"A","Restarting the router clears many temporary glitches and is the standard first troubleshooting step."],
+    ["Slow Wi-Fi can be caused by:",["Too many connected devices","A clean desk","A new keyboard","Updated drivers"],"A","When many devices share the same bandwidth, each one gets a smaller slice, which slows the connection for everyone."],
+    ["To improve a weak Wi-Fi signal, you should:",["Move away from the router","Move closer to the router","Turn off the modem permanently","Delete the browser"],"B","Wi-Fi signal strength drops with distance and obstacles, so moving closer to the router improves the connection."],
+    ["Damaged cables can cause:",["Faster internet","Loss of connection","Better sound quality","Brighter display"],"B","A damaged cable can't reliably carry a signal, which leads to a dropped or unstable connection."],
+    ["Updating router firmware helps:",["Improve network performance","Delete personal files","Slow the connection","Change the wallpaper"],"A","Firmware updates often include performance, stability, and security improvements for the router."]
+  ],
+  5:[
+    ["An application may fail to open due to:",["Damaged files or outdated software","A clean desktop","A charged battery","A new mouse"],"A","Corrupted installation files or an outdated version are common reasons an application won't launch."],
+    ["A first step when software freezes is to:",["Close unnecessary applications","Delete the entire OS","Buy new hardware","Unplug the monitor"],"A","Closing other running programs frees up memory and CPU that may be causing the freeze."],
+    ["Software should be downloaded from:",["Any random website","Trusted sources only","Unknown links in emails","Pop-up ads"],"B","Downloading only from trusted, official sources greatly reduces the risk of installing malware."],
+    ["Regularly backing up files helps protect against:",["Slow typing","Data loss from software issues","Better battery life","Faster Wi-Fi"],"B","Backups make sure your files survive if a software crash, bug, or corruption destroys the originals."],
+    ["Keeping programs updated helps:",["Fix bugs and improve compatibility","Slow the computer down","Delete personal data","Disable the keyboard"],"A","Software updates patch known bugs and keep the program compatible with your system and other software."],
+    ["Software crashing may be caused by:",["Software bugs and low memory","A new charger","A quiet room","Bright wallpaper"],"A","Bugs in the program's code and insufficient available memory are both common causes of crashes."]
+  ],
+  6:[
+    ["The operating system manages:",["Hardware, files, and applications","Only the printer","Only Wi-Fi passwords","Only the mouse"],"A","The OS is the central software that coordinates hardware, manages files, and runs applications — not just one device."],
+    ["A startup problem may be caused by:",["Corrupted system files","A clean desktop","A new mouse pad","High volume"],"A","Damaged or missing system files can prevent the operating system from loading correctly at startup."],
+    ["Drivers allow the OS to communicate with:",["Hardware devices","Websites only","Email servers","Social media"],"A","Drivers act as the translator between the operating system and physical hardware devices."],
+    ["A solution for driver problems is to:",["Ignore them","Update or reinstall the driver","Delete the OS","Unplug the monitor"],"B","Updating or reinstalling a driver replaces corrupted or outdated files, which usually fixes hardware communication issues."],
+    ["Which is an example of an operating system?",["Windows","Google Chrome","Microsoft Word","Wi-Fi router"],"A","Windows is an operating system; Chrome and Word are applications that run on top of one, and a router is hardware."],
+    ["Using recovery tools can help when:",["The computer won't start properly","The Wi-Fi is too fast","The desktop is too colorful","The mouse is wireless"],"A","Recovery tools are specifically designed to repair a system that fails to boot or start correctly."]
+  ],
+  7:[
+    ["A mobile device may run slowly because of:",["Full storage and too many background apps","A fully charged battery","A new case","Airplane mode"],"A","Low free storage and many apps running in the background both consume resources, slowing the device down."],
+    ["Battery problems can be caused by:",["Old batteries and overheating","A clean home screen","New wallpaper","Airplane mode"],"A","Battery chemistry degrades with age, and heat accelerates that wear, both reducing battery performance."],
+    ["A solution to slow mobile performance is:",["Delete unnecessary files","Add more apps","Lower the volume","Turn on airplane mode permanently"],"A","Freeing up storage space by removing unneeded files helps restore normal performance."],
+    ["An application crashing on mobile may need:",["An update or reinstall","A new SIM card","A new charger","A screen protector"],"A","Updating or reinstalling the app replaces the buggy files that are likely causing the crashes."],
+    ["Which practice helps mobile battery health?",["Using proper chargers and avoiding extreme heat","Leaving it in direct sunlight","Installing unknown apps","Ignoring updates"],"A","The correct charger and avoiding extreme heat both help preserve battery lifespan over time."],
+    ["What kind of problems can mobile devices experience, like computers?",["Hardware, software, and connection problems","Only Wi-Fi problems","Only battery problems","No problems at all"],"A","Mobile devices face the same broad categories of issues as computers: hardware, software, and connectivity problems."]
+  ],
+  8:[
+    ["Malware is designed to:",["Improve system speed","Damage systems or steal information","Update drivers","Clean dust"],"B","Malware is malicious software built specifically to harm systems or steal data — it never improves performance."],
+    ["A sign of malware infection is:",["The computer runs unusually slowly","The Wi-Fi improves","The screen brightens","The battery charges faster"],"A","Malware often runs hidden processes in the background that consume resources, causing noticeable slowdowns."],
+    ["A recommended cybersecurity practice is:",["Sharing passwords with friends","Using strong, unique passwords","Clicking unknown links","Disabling antivirus"],"B","Strong, unique passwords make it much harder for attackers to break into your accounts."],
+    ["Two-factor authentication helps by:",["Adding an extra layer of account security","Slowing down login","Deleting your account","Removing passwords entirely"],"A","2FA requires a second proof of identity beyond the password, making an account much harder to compromise."],
+    ["To reduce malware risk, users should:",["Avoid unsafe downloads and update security software","Download from any pop-up","Disable antivirus updates","Share account passwords"],"A","Careful downloading habits combined with up-to-date security software are the main defenses against malware."],
+    ["Phishing attacks typically try to:",["Trick users into giving up sensitive information","Speed up the computer","Clean dust from hardware","Update the OS automatically"],"A","Phishing relies on deception — fake messages or sites designed to trick users into revealing personal or financial details."]
+  ],
+  9:[
+    ["Task Manager is used to:",["View running programs and resource usage","Print documents","Browse the internet","Update firmware"],"A","Task Manager shows which programs are running and how much CPU, memory, and other resources they're using."],
+    ["Device Manager is mainly used to:",["Manage hardware devices and drivers","Edit photos","Send emails","Play music"],"A","Device Manager lists all hardware connected to the system and lets you update, disable, or troubleshoot drivers."],
+    ["Command Prompt is useful for:",["Advanced tasks like checking network connections","Watching videos","Painting images","Formatting text documents"],"A","Command Prompt lets you run diagnostic commands, such as checking network status, that aren't available through the normal interface."],
+    ["A professional troubleshooting technique is to:",["Change everything at once","Test one solution at a time","Guess randomly","Skip verification"],"B","Changing only one thing at a time lets you clearly identify which specific change actually fixed the issue."],
+    ["Antivirus tools help by:",["Detecting and removing harmful software","Increasing screen brightness","Managing Wi-Fi passwords","Formatting the hard drive"],"A","Antivirus software scans for and removes malicious programs from the system."],
+    ["Before applying a fix, a technician should:",["Gather information and check simple causes first","Replace all hardware immediately","Ignore the symptoms","Skip testing"],"A","Ruling out simple, common causes first saves time and avoids unnecessary, more drastic fixes."]
+  ],
+  10:[
+    ["If a laptop cannot connect to Wi-Fi while other devices can, a good step is to:",["Check Wi-Fi settings and restart the router","Buy a new laptop","Delete the browser","Ignore the issue"],"A","Since other devices connect fine, the issue is likely local to that laptop's settings, and a router restart can also rule out a network-side glitch."],
+    ["If a printer does not print, a possible cause is:",["Empty ink cartridge or no paper","Too much RAM","A fast internet connection","A new wallpaper"],"A","Printers commonly fail to print because of simple supply issues like an empty cartridge or no paper loaded."],
+    ["A program that keeps crashing might need:",["An update or reinstall","A new printer","A different mouse","A password change"],"A","Updating or reinstalling a crashing program replaces the corrupted or buggy files causing the crashes."],
+    ["Overheating in a computer can often be solved by:",["Cleaning vents and improving airflow","Increasing screen brightness","Disabling the keyboard","Adding more wallpaper"],"A","Restoring proper airflow by cleaning the vents lets heat escape, resolving the overheating."],
+    ["Applying troubleshooting knowledge to real situations helps students:",["Avoid learning entirely","Build practical problem-solving skills","Slow down their learning","Depend only on others"],"B","Practicing on real scenarios turns theoretical knowledge into hands-on, practical problem-solving skill."],
+    ["The final stage of solving a practical problem is to:",["Confirm the problem is actually resolved","Immediately forget the issue","Reinstall the OS every time","Ignore user feedback"],"A","The last step in any troubleshooting process is verifying that the fix actually resolved the original problem."]
+  ]
+};
+
+/* ==========================================================
+   QUIZ SYSTEM
+   ========================================================== */
+let activeQuiz = null;
+function buildQuizPicker(){
+  const wrap = document.getElementById('quizPicker');
+  let html='';
+  for(let i=1;i<=10;i++){
+    html += `<button class="lesson-pill" onclick="startQuiz(${i})">Lesson ${i}</button>`;
+  }
+  wrap.innerHTML = html;
+}
+buildQuizPicker();
+
+function startQuiz(number){
+  activeQuiz = number;
+  showPage('quiz');
+  document.getElementById('quizTitle').innerHTML = 'Lesson ' + number + ' Quiz';
+  const container = document.getElementById('quizQuestions');
+  document.getElementById('quizResult').innerHTML = '';
+  document.getElementById('quizReviewWrap').innerHTML = '';
+  container.innerHTML = '';
+  const questions = quizData[number];
+  if(!questions){
+    container.innerHTML = '<p>Quiz is currently unavailable.</p>';
+    return;
+  }
+  questions.forEach((q,index)=>{
+    const box = document.createElement('div');
+    box.className = 'quiz-question';
+    let html = `<h3>${index+1}. ${q[0]}</h3>`;
+    q[1].forEach((option,i)=>{
+      const letter = String.fromCharCode(65+i);
+      html += `<label><input type="radio" name="q${index}" value="${letter}"> ${letter}. ${option}</label>`;
+    });
+    box.innerHTML = html;
+    container.appendChild(box);
+  });
+}
+
+let lastQuizAnswers = [];
+function submitQuiz(){
+  if(!activeQuiz) return;
+  const questions = quizData[activeQuiz];
+  let score = 0;
+  lastQuizAnswers = [];
+  questions.forEach((q,index)=>{
+    const selected = document.querySelector(`input[name="q${index}"]:checked`);
+    const chosen = selected ? selected.value : null;
+    lastQuizAnswers.push(chosen);
+    if(chosen === q[2]) score++;
+  });
+  const percent = Math.round((score/questions.length)*100);
+  const passed = percent>=70;
+  document.getElementById('quizResult').innerHTML =
+    `🎉 Quiz Finished!<br><br>Score: ${score}/${questions.length}<br>Result: ${percent}%<br><br>` +
+    (passed ? '🏆 Excellent! Lesson completed.' : '📚 Review the lesson and try again.');
+  const reviewWrap = document.getElementById('quizReviewWrap');
+  reviewWrap.innerHTML = passed ? '' :
+    `<button type="button" class="action review-btn" onclick="reviewQuizAnswers()">🔍 Check What's Wrong</button>`;
+  const isNewPass = saveQuizResult(activeQuiz, score, questions.length, percent);
+  if(passed){
+    addXP(isNewPass ? 25 : 5, 'Passed Lesson ' + activeQuiz + ' quiz');
+  } else {
+    addXP(3, 'Attempted Lesson ' + activeQuiz + ' quiz');
+  }
+  buildLessonPills();
+  checkBadges();
+}
+
+function reviewQuizAnswers(){
+  if(!activeQuiz) return;
+  const questions = quizData[activeQuiz];
+  const reviewWrap = document.getElementById('quizReviewWrap');
+  let html = '<div class="quiz-review"><h3>📚 Where things went wrong</h3>';
+  questions.forEach((q,index)=>{
+    const [questionText, options, correctLetter, explanation] = q;
+    const userLetter = lastQuizAnswers[index];
+    const isCorrect = userLetter === correctLetter;
+    const correctIndex = correctLetter.charCodeAt(0) - 65;
+    const userIndex = userLetter ? userLetter.charCodeAt(0) - 65 : -1;
+    html += `<div class="review-item ${isCorrect ? 'review-correct' : 'review-wrong'}">
+      <div class="review-q"><span class="review-badge">${isCorrect ? '✅' : '❌'}</span> ${index+1}. ${questionText}</div>
+      ${isCorrect ? '' : `<div class="review-line"><strong>Your answer:</strong> ${userLetter ? userLetter + '. ' + options[userIndex] : '(no answer selected)'}</div>`}
+      <div class="review-line"><strong>Correct answer:</strong> ${correctLetter}. ${options[correctIndex]}</div>
+      <div class="review-why"><strong>Why:</strong> ${explanation}</div>
+    </div>`;
+  });
+  html += '</div>';
+  reviewWrap.innerHTML = html;
+}
+
+/* ==========================================================
+   ENTRY GATE — name + Gmail required before the site unlocks.
+   Local sign-in only: stored in this browser's localStorage,
+   no account is created on any server.
+   ========================================================== */
+function isKnownUser(){
+  return !!(localStorage.getItem('ictUserName') && localStorage.getItem('ictUserEmail'));
+}
+function openGate(){
+  const gate = document.getElementById('entryGate');
+  gate.classList.remove('gate-hidden');
+  document.body.style.overflow = 'hidden';
+  const name = localStorage.getItem('ictUserName');
+  const email = localStorage.getItem('ictUserEmail');
+  document.getElementById('gateName').value = name || '';
+  document.getElementById('gateEmail').value = email || '';
+  document.getElementById('gateError').textContent = '';
+  document.getElementById('gateCancelBtn').style.display = isKnownUser() ? 'block' : 'none';
+}
+function closeGate(){
+  if(!isKnownUser()) return; // can't dismiss until signed in the first time
+  document.getElementById('entryGate').classList.add('gate-hidden');
+  document.body.style.overflow = '';
+}
+function submitGate(){
+  const name = document.getElementById('gateName').value.trim();
+  const email = document.getElementById('gateEmail').value.trim();
+  const errorEl = document.getElementById('gateError');
+  if(!name){
+    errorEl.textContent = 'Please enter your name.';
+    document.getElementById('gateName').focus();
+    return;
+  }
+  if(!/^[^\s@]+@gmail\.com$/i.test(email)){
+    errorEl.textContent = 'Please enter a valid Gmail address (name@gmail.com).';
+    document.getElementById('gateEmail').focus();
+    return;
+  }
+  errorEl.textContent = '';
+  localStorage.setItem('ictUserName', name);
+  localStorage.setItem('ictUserEmail', email);
+  document.getElementById('entryGate').classList.add('gate-hidden');
+  document.body.style.overflow = '';
+  refreshLoginUI();
+}
+function doLogout(){
+  localStorage.removeItem('ictUserName');
+  localStorage.removeItem('ictUserEmail');
+  refreshLoginUI();
+  openGate();
+}
+function refreshLoginUI(){
+  const btn = document.getElementById('loginBtn') || document.getElementById('userChip');
+  const name = localStorage.getItem('ictUserName');
+  if(name){
+    btn.id = 'userChip';
+    btn.textContent = 'HI ' + name.toUpperCase() + '! 👋';
+    btn.onclick = openGate;
+  } else {
+    btn.id = 'loginBtn';
+    btn.textContent = 'Log In';
+    btn.onclick = openGate;
+  }
+}
+refreshLoginUI();
+if(!isKnownUser()){
+  document.body.style.overflow = 'hidden';
+} else {
+  document.getElementById('entryGate').classList.add('gate-hidden');
+}
+
+/* ==========================================================
+   TYPEWRITER — animates the two code-panel mockups
+   ========================================================== */
+function typewriter(elId, lines, opts){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  const speed = (opts && opts.speed) || 26;
+  const pause = (opts && opts.pause) || 1400;
+  let li = 0, ci = 0, buffer = '';
+  function tick(){
+    if(li >= lines.length){
+      setTimeout(()=>{ buffer=''; li=0; ci=0; el.innerHTML=''; tick(); }, pause);
+      return;
+    }
+    const line = lines[li];
+    if(ci <= line.length){
+      el.innerHTML = buffer + line.slice(0,ci) + '<span class="cursor-blink">▌</span>';
+      ci++;
+      setTimeout(tick, speed);
+    } else {
+      buffer += line + '\n';
+      li++; ci=0;
+      setTimeout(tick, 260);
+    }
+  }
+  tick();
+}
+typewriter('gateTypewriter', [
+  '$ whoami',
+  '> guest_user',
+  '$ ict-hub --sign-in',
+  '> waiting for name + gmail...'
+]);
+typewriter('heroTypewriter', [
+  '$ diagnose --device laptop',
+  '> checking power supply... OK',
+  '> checking RAM............ OK',
+  '> checking temperature.... WARN',
+  '> issue found: overheating',
+  '> solution: clean vents, improve airflow'
+], {speed:22, pause:1800});
+
+/* ==========================================================
+   PROGRESS TRACKING (localStorage)
+   ========================================================== */
+function getProgress(){
+  try{ return JSON.parse(localStorage.getItem('ictProgress')) || {}; }
+  catch(e){ return {}; }
+}
+function saveQuizResult(lesson, score, total, percent){
+  const progress = getProgress();
+  const wasPassed = progress[lesson] && progress[lesson].percent>=70;
+  const prevBest = progress[lesson] ? progress[lesson].percent : -1;
+  let isNewPass = false;
+  if(percent > prevBest){
+    progress[lesson] = {score, total, percent};
+    localStorage.setItem('ictProgress', JSON.stringify(progress));
+  }
+  if(percent>=70 && !wasPassed) isNewPass = true;
+  return isNewPass;
+}
+function renderProgress(){
+  const name = localStorage.getItem('ictUserName');
+  document.getElementById('progressGreeting').textContent = name ? `📊 ${name}'s Progress` : '📊 Your Progress';
+  document.getElementById('progressSub').textContent = name
+    ? 'Progress is saved in this browser. Complete quizzes to fill your bar.'
+    : 'Log in to save your progress across visits on this device.';
+  const progress = getProgress();
+  const tbody = document.querySelector('#progressTable tbody');
+  let rows='', completed=0, quizTotal=0, quizSum=0;
+  for(let i=1;i<=10;i++){
+    const p = progress[i];
+    if(p && p.percent>=70) completed++;
+    if(p){ quizTotal++; quizSum += p.percent; }
+    rows += `<tr><td>Lesson ${i}</td><td>${p ? p.percent+'%' : '—'}</td><td>${p ? (p.percent>=70?'✅ Passed':'🔁 Try again') : '⏳ Not attempted'}</td></tr>`;
+  }
+  tbody.innerHTML = rows;
+  document.getElementById('progressBar').style.width = (completed*10)+'%';
+  const g = getGamification();
+  const avg = quizTotal ? Math.round(quizSum/quizTotal) : 0;
+  const statWrap = document.getElementById('progressStats');
+  if(statWrap){
+    statWrap.innerHTML = `
+      <div class="stat-chip"><span class="sc-value">${g.xp}</span><span class="sc-label">Total XP</span></div>
+      <div class="stat-chip"><span class="sc-value">${levelFromXP(g.xp)}</span><span class="sc-label">Level</span></div>
+      <div class="stat-chip"><span class="sc-value">${g.streak}</span><span class="sc-label">Day Streak</span></div>
+      <div class="stat-chip"><span class="sc-value">${avg}%</span><span class="sc-label">Quiz Average</span></div>
+      <div class="stat-chip"><span class="sc-value">${g.badges.length}</span><span class="sc-label">Badges Earned</span></div>
+    `;
+  }
+}
+
+/* ==========================================================
+   3D INTERACTIVE TILT — applied to every .card on hover
+   ========================================================== */
+document.addEventListener('mousemove', function(e){
+  const card = e.target.closest ? e.target.closest('.card') : null;
+  document.querySelectorAll('.card').forEach(c=>{
+    if(c !== card){
+      c.style.transform = '';
+    }
+  });
+  if(card){
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left)/rect.width - 0.5;
+    const y = (e.clientY - rect.top)/rect.height - 0.5;
+    card.style.transform = `perspective(900px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateZ(4px)`;
+  }
+});
+document.addEventListener('mouseleave', function(){
+  document.querySelectorAll('.card').forEach(c=>c.style.transform='');
+}, true);
+
+/* ==========================================================
+   THREE.JS 3D HERO SCENE — rotating network core, mouse-reactive
+   ========================================================== */
+(function initHero3D(){
+  const canvas = document.getElementById('heroCanvas');
+  if(!canvas || typeof THREE === 'undefined') return;
+
+  const hero = canvas.parentElement;
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  function resize(){
+    const w = hero.clientWidth, h = hero.clientHeight;
+    renderer.setSize(w,h);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, hero.clientWidth/hero.clientHeight, 0.1, 100);
+  camera.position.z = 7;
+
+  const coreGroup = new THREE.Group();
+  scene.add(coreGroup);
+
+  // wireframe icosahedron "network core"
+  const coreGeo = new THREE.IcosahedronGeometry(2.1, 1);
+  const coreMat = new THREE.MeshBasicMaterial({color:0x00d4ff, wireframe:true, transparent:true, opacity:.55});
+  const core = new THREE.Mesh(coreGeo, coreMat);
+  coreGroup.add(core);
+
+  // inner solid glow sphere
+  const glowGeo = new THREE.IcosahedronGeometry(1.35, 1);
+  const glowMat = new THREE.MeshBasicMaterial({color:0xffb84d, wireframe:true, transparent:true, opacity:.28});
+  const glow = new THREE.Mesh(glowGeo, glowMat);
+  coreGroup.add(glow);
+
+  // orbiting particle nodes
+  const nodeCount = 140;
+  const positions = new Float32Array(nodeCount*3);
+  for(let i=0;i<nodeCount;i++){
+    const r = 3.2 + Math.random()*1.6;
+    const theta = Math.random()*Math.PI*2;
+    const phi = Math.acos((Math.random()*2)-1);
+    positions[i*3]   = r*Math.sin(phi)*Math.cos(theta);
+    positions[i*3+1] = r*Math.sin(phi)*Math.sin(theta);
+    positions[i*3+2] = r*Math.cos(phi);
+  }
+  const particleGeo = new THREE.BufferGeometry();
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+  const particleMat = new THREE.PointsMaterial({color:0x8fe9ff, size:0.045, transparent:true, opacity:.85});
+  const particles = new THREE.Points(particleGeo, particleMat);
+  scene.add(particles);
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  let mouseX=0, mouseY=0;
+  hero.addEventListener('mousemove', (e)=>{
+    const rect = hero.getBoundingClientRect();
+    mouseX = ((e.clientX-rect.left)/rect.width - 0.5)*2;
+    mouseY = ((e.clientY-rect.top)/rect.height - 0.5)*2;
+  });
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function animate(){
+    requestAnimationFrame(animate);
+    if(!reduceMotion){
+      coreGroup.rotation.y += 0.0032;
+      coreGroup.rotation.x += 0.0011;
+      particles.rotation.y -= 0.0009;
+    }
+    camera.position.x += (mouseX*1.4 - camera.position.x)*0.04;
+    camera.position.y += (-mouseY*1.0 - camera.position.y)*0.04;
+    camera.lookAt(0,0,0);
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+
+/* ==========================================================
+   GAMIFICATION — XP, levels, streaks, badges
+   ========================================================== */
+function getGamification(){
+  try{
+    const g = JSON.parse(localStorage.getItem('ictGamify'));
+    if(g) return g;
+  }catch(e){}
+  return {xp:0, badges:[], streak:0, lastVisit:null, notes:{}, bookmarks:[], learnedCards:[]};
+}
+function saveGamification(g){ localStorage.setItem('ictGamify', JSON.stringify(g)); }
+function levelFromXP(xp){ return Math.floor(xp/100) + 1; }
+function addXP(amount, reason){
+  const g = getGamification();
+  g.xp += amount;
+  saveGamification(g);
+  showToast(`+${amount} XP — ${reason}`);
+  checkLevelUp();
+}
+let lastKnownLevel = null;
+function checkLevelUp(){
+  const g = getGamification();
+  const lvl = levelFromXP(g.xp);
+  if(lastKnownLevel === null) lastKnownLevel = lvl;
+  if(lvl > lastKnownLevel){
+    showToast(`🎉 Level Up! You reached Level ${lvl}`, true);
+    lastKnownLevel = lvl;
+  }
+}
+const BADGE_DEFS = [
+  {id:'first', icon:'🥇', name:'First Lesson', desc:'Complete 1 lesson', check:g=>completedLessonCount()>=1},
+  {id:'explorer', icon:'🧭', name:'ICT Explorer', desc:'Complete 5 lessons', check:g=>completedLessonCount()>=5},
+  {id:'quizmaster', icon:'🏆', name:'Quiz Master', desc:'Pass all 10 quizzes', check:g=>passedQuizCount()>=10},
+  {id:'streak7', icon:'🔥', name:'7-Day Streak', desc:'Learn 7 days in a row', check:g=>g.streak>=7},
+  {id:'expert', icon:'🎓', name:'ICT Expert', desc:'Complete every lesson & quiz', check:g=>completedLessonCount()>=10 && passedQuizCount()>=10}
+];
+function completedLessonCount(){
+  const p = getProgress();
+  let c=0;
+  for(let i=1;i<=10;i++) if(p['c'+i]) c++;
+  return c;
+}
+function passedQuizCount(){
+  const p = getProgress();
+  let c=0;
+  for(let i=1;i<=10;i++) if(p[i] && p[i].percent>=70) c++;
+  return c;
+}
+function checkBadges(){
+  const g = getGamification();
+  let changed = false;
+  BADGE_DEFS.forEach(b=>{
+    if(!g.badges.includes(b.id) && b.check(g)){
+      g.badges.push(b.id);
+      changed = true;
+      showToast(`🏅 Badge Unlocked: ${b.name}`, true);
+    }
+  });
+  if(changed) saveGamification(g);
+  updateCertificateVisibility();
+}
+function checkStreak(){
+  const g = getGamification();
+  const today = new Date().toDateString();
+  if(g.lastVisit === today) return;
+  const yesterday = new Date(Date.now()-86400000).toDateString();
+  g.streak = (g.lastVisit === yesterday) ? g.streak + 1 : 1;
+  g.lastVisit = today;
+  saveGamification(g);
+  checkBadges();
+}
+function showToast(msg, isBadge){
+  const stack = document.getElementById('toastStack');
+  if(!stack) return;
+  const t = document.createElement('div');
+  t.className = 'toast' + (isBadge ? ' badge-toast' : '');
+  t.innerHTML = msg;
+  stack.appendChild(t);
+  setTimeout(()=>t.remove(), 3700);
+}
+
+/* ==========================================================
+   THEME TOGGLE
+   ========================================================== */
+function toggleTheme(){
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('ictTheme', isLight ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
+}
+(function initTheme(){
+  if(localStorage.getItem('ictTheme') === 'light'){
+    document.body.classList.add('light');
+    const btn = document.getElementById('themeToggle');
+    if(btn) btn.textContent = '☀️';
+  }
+})();
+
+/* ==========================================================
+   ACTIVITIES — one interactive activity injected per lesson
+   ========================================================== */
+const activityData = {
+  1:{type:'mc', q:'Which of these is an example of hardware?', opts:['Keyboard','Web browser','Antivirus app','Operating system'], correct:0, why:'Hardware is the physical parts of a computer, like a keyboard, monitor, or hard drive.'},
+  2:{type:'tf', q:'RAM permanently stores your files even after the computer is turned off.', correct:false, why:'RAM is temporary memory — it clears when the computer powers off. Storage drives keep files permanently.'},
+  3:{type:'fill', q:'The process of finding and fixing computer problems is called ________.', answer:'troubleshooting', why:'Troubleshooting is the step-by-step process of identifying, testing, and solving technical problems.'},
+  4:{type:'mc', q:'What should you check first if a Wi-Fi connection drops?', opts:['Buy a new laptop','Restart the router','Delete all files','Change your password'], correct:1, why:'Restarting the router solves most common connectivity issues quickly and safely.'},
+  5:{type:'tf', q:'Installing software updates can help fix bugs and close security gaps.', correct:true, why:'Updates often include bug fixes and security patches from the developer.'},
+  6:{type:'mc', q:'Which tool lets you view running programs and resource usage on Windows?', opts:['Task Manager','Calculator','Paint','Notepad'], correct:0, why:'Task Manager shows CPU, memory, and running app usage in real time.'},
+  7:{type:'fill', q:'A device that has no cellular network and only local features is in ________ mode.', answer:'airplane', why:'Airplane mode turns off wireless signals like cellular, Wi-Fi, and Bluetooth.'},
+  8:{type:'mc', q:'What is the best defense against phishing emails?', opts:['Click every link to check it','Verify the sender before acting','Reply with your password','Ignore all antivirus software'], correct:1, why:'Always verify a sender through a separate trusted channel before clicking links or sharing info.'},
+  9:{type:'tf', q:'A good troubleshooting habit is to change several settings at once to save time.', correct:false, why:'Change one thing at a time so you know exactly what fixed (or broke) the problem.'},
+  10:{type:'mc', q:'A printer is not printing. What should you check first?', opts:['Paper and ink/toner levels','The Wi-Fi router brand','The monitor resolution','The keyboard language'], correct:0, why:'Most printer issues start with simple supply checks like paper and ink before anything else.'}
+};
+function renderActivities(){
+  for(let i=1;i<=10;i++){
+    const lessonEl = document.getElementById('lesson'+i);
+    const data = activityData[i];
+    if(!lessonEl || !data || document.getElementById('activity'+i)) continue;
+    const box = document.createElement('div');
+    box.className = 'activity-box';
+    box.id = 'activity'+i;
+    let inner = `<h4>⚡ Quick Activity</h4><p>${data.q}</p>`;
+    if(data.type === 'mc'){
+      data.opts.forEach((opt,idx)=>{
+        inner += `<button class="opt-btn" onclick="answerMC(${i},${idx})" id="opt-${i}-${idx}">${opt}</button>`;
+      });
+    } else if(data.type === 'tf'){
+      inner += `<button class="opt-btn" onclick="answerTF(${i},true)" id="opt-${i}-t">True</button>`;
+      inner += `<button class="opt-btn" onclick="answerTF(${i},false)" id="opt-${i}-f">False</button>`;
+    } else if(data.type === 'fill'){
+      inner += `<input type="text" class="fill-input" id="fill-${i}" placeholder="Type your answer…">`;
+      inner += `<button class="action" onclick="answerFill(${i})">Check Answer</button>`;
+    }
+    inner += `<div class="activity-feedback" id="feedback-${i}"></div>`;
+    box.innerHTML = inner;
+    lessonEl.appendChild(box);
+  }
+}
+function activityAlreadyDone(i){
+  const g = getGamification();
+  return !!(g.activitiesDone && g.activitiesDone[i]);
+}
+function markActivityDone(i){
+  const g = getGamification();
+  if(!g.activitiesDone) g.activitiesDone = {};
+  const first = !g.activitiesDone[i];
+  g.activitiesDone[i] = true;
+  saveGamification(g);
+  return first;
+}
+function showActivityFeedback(i, correct, why){
+  const fb = document.getElementById('feedback-'+i);
+  fb.className = 'activity-feedback show ' + (correct ? 'right' : 'wrong');
+  fb.innerHTML = (correct ? '✅ Correct! ' : '❌ Not quite. ') + why;
+  if(correct && markActivityDone(i)) addXP(8, 'Correct activity answer (Lesson '+i+')');
+}
+function answerMC(i, idx){
+  const data = activityData[i];
+  document.querySelectorAll(`[id^="opt-${i}-"]`).forEach((b,bi)=>{
+    b.disabled = true;
+    if(bi === data.correct) b.classList.add('correct');
+    else if(bi === idx) b.classList.add('incorrect');
+  });
+  showActivityFeedback(i, idx === data.correct, data.why);
+}
+function answerTF(i, val){
+  const data = activityData[i];
+  const correctId = data.correct ? 't' : 'f';
+  const chosenId = val ? 't' : 'f';
+  document.getElementById('opt-'+i+'-t').disabled = true;
+  document.getElementById('opt-'+i+'-f').disabled = true;
+  document.getElementById('opt-'+i+'-'+correctId).classList.add('correct');
+  if(chosenId !== correctId) document.getElementById('opt-'+i+'-'+chosenId).classList.add('incorrect');
+  showActivityFeedback(i, val === data.correct, data.why);
+}
+function answerFill(i){
+  const data = activityData[i];
+  const input = document.getElementById('fill-'+i);
+  const val = (input.value||'').trim().toLowerCase();
+  const correct = val === data.answer.toLowerCase();
+  showActivityFeedback(i, correct, data.why + ` (Answer: "${data.answer}")`);
+}
+
+/* ==========================================================
+   FLASHCARDS
+   ========================================================== */
+const flashData = [
+  {q:'What does CPU stand for?', a:'Central Processing Unit — the "brain" of the computer that executes instructions.'},
+  {q:'What does RAM stand for?', a:'Random Access Memory — temporary memory used while programs are running.'},
+  {q:'What is an IP address?', a:'A unique numerical label assigned to a device on a network so it can send and receive data.'},
+  {q:'What is malware?', a:'Malicious software designed to damage, disrupt, or gain unauthorized access to a system.'},
+  {q:'What does Wi-Fi allow devices to do?', a:'Connect to a network and the internet wirelessly using radio signals.'},
+  {q:'What is a firewall?', a:'A security system that monitors and controls incoming and outgoing network traffic.'},
+  {q:'What is cloud storage?', a:'Storing data on remote servers accessed over the internet instead of a local device.'},
+  {q:'What is an operating system?', a:'Software that manages a computer\'s hardware and provides services for other programs (e.g. Windows, macOS).'},
+  {q:'What is phishing?', a:'A scam that tries to trick users into revealing sensitive information, often via fake emails or links.'},
+  {q:'What is a driver (in computing)?', a:'Software that lets the operating system communicate with hardware devices.'},
+  {q:'What does HTTP stand for?', a:'HyperText Transfer Protocol — the protocol used to load webpages over the internet.'},
+  {q:'What is two-factor authentication?', a:'A security method requiring two forms of verification, like a password plus a code sent to your phone.'},
+  {q:'What is a router used for?', a:'It directs data traffic between your devices and the internet, and between devices on the same network.'},
+  {q:'What is storage (in a computer)?', a:'The component that holds data and files permanently, such as an SSD or hard drive.'}
+];
+let flashOrder = flashData.map((_,i)=>i);
+let flashIndex = 0;
+function currentFlashId(){ return flashOrder[flashIndex]; }
+function renderFlashcard(){
+  const card = flashData[currentFlashId()];
+  document.getElementById('flashFront').textContent = card.q;
+  document.getElementById('flashBack').textContent = card.a;
+  document.getElementById('flashCard').classList.remove('flipped');
+  const g = getGamification();
+  const learnedCount = (g.learnedCards||[]).length;
+  document.getElementById('flashCounter').textContent = `Card ${flashIndex+1} of ${flashData.length} · ${learnedCount} of ${flashData.length} learned`;
+}
+function flipFlashcard(){ document.getElementById('flashCard').classList.toggle('flipped'); }
+function nextFlashcard(){ flashIndex = (flashIndex+1) % flashData.length; renderFlashcard(); }
+function prevFlashcard(){ flashIndex = (flashIndex-1+flashData.length) % flashData.length; renderFlashcard(); }
+function shuffleFlashcards(){
+  for(let i=flashOrder.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [flashOrder[i],flashOrder[j]] = [flashOrder[j],flashOrder[i]];
+  }
+  flashIndex = 0;
+  renderFlashcard();
+  showToast('🔀 Flashcards shuffled');
+}
+function markFlashcardLearned(){
+  const g = getGamification();
+  if(!g.learnedCards) g.learnedCards = [];
+  const id = currentFlashId();
+  if(!g.learnedCards.includes(id)){
+    g.learnedCards.push(id);
+    saveGamification(g);
+    addXP(5, 'Marked flashcard as learned');
+  }
+  renderFlashcard();
+  if(flashIndex < flashData.length-1) nextFlashcard();
+}
+
+/* ==========================================================
+   NOTES & BOOKMARKS
+   ========================================================== */
+function getLessonNote(num){
+  const g = getGamification();
+  return (g.notes && g.notes[num]) || '';
+}
+function saveLessonNote(text){
+  const g = getGamification();
+  if(!g.notes) g.notes = {};
+  g.notes[currentLesson] = text;
+  saveGamification(g);
+}
+function toggleBookmark(){
+  const g = getGamification();
+  if(!g.bookmarks) g.bookmarks = [];
+  const idx = g.bookmarks.indexOf(currentLesson);
+  if(idx === -1){ g.bookmarks.push(currentLesson); showToast('🔖 Lesson bookmarked'); }
+  else{ g.bookmarks.splice(idx,1); }
+  saveGamification(g);
+  refreshBookmarkStar();
+}
+function refreshBookmarkStar(){
+  const g = getGamification();
+  const star = document.getElementById('bookmarkStar');
+  if(!star) return;
+  const bookmarked = (g.bookmarks||[]).includes(currentLesson);
+  star.textContent = bookmarked ? '★' : '☆';
+  star.style.color = bookmarked ? 'var(--amber)' : '';
+}
+
+/* ==========================================================
+   PROFILE PAGE
+   ========================================================== */
+function saveProfileName(){
+  const val = document.getElementById('profileNameInput').value.trim();
+  if(!val) return;
+  localStorage.setItem('ictUserName', val);
+  refreshLoginUI();
+  showToast('Name updated to ' + val);
+  renderProfile();
+}
+function renderProfile(){
+  const name = localStorage.getItem('ictUserName') || '';
+  document.getElementById('profileNameInput').value = name;
+  const g = getGamification();
+  const lvl = levelFromXP(g.xp);
+  document.getElementById('profileStats').innerHTML = `
+    <div class="stat-chip"><span class="sc-value">${completedLessonCount()}/10</span><span class="sc-label">Lessons Done</span></div>
+    <div class="stat-chip"><span class="sc-value">${passedQuizCount()}/10</span><span class="sc-label">Quizzes Passed</span></div>
+    <div class="stat-chip"><span class="sc-value">${g.streak}</span><span class="sc-label">Day Streak</span></div>
+    <div class="stat-chip"><span class="sc-value">${(g.bookmarks||[]).length}</span><span class="sc-label">Bookmarks</span></div>
+  `;
+  document.getElementById('profileLevelLabel').textContent = 'Level ' + lvl;
+  const into = g.xp - (lvl-1)*100;
+  document.getElementById('profileXpLabel').textContent = into + ' / 100 XP';
+  document.getElementById('profileXpBar').style.width = into + '%';
+  document.getElementById('profileBadges').innerHTML = BADGE_DEFS.map(b=>{
+    const unlocked = g.badges.includes(b.id);
+    return `<div class="badge${unlocked?' unlocked':''}"><span class="b-icon">${b.icon}</span><span class="b-name">${b.name}</span><span class="b-desc">${b.desc}</span></div>`;
+  }).join('');
+  const bm = g.bookmarks || [];
+  document.getElementById('profileBookmarks').innerHTML = bm.length
+    ? bm.map(n=>`<div class="bookmark-item"><span>🔖 Lesson ${n}</span><button class="del-btn" onclick="removeBookmark(${n})">Remove</button></div>`).join('')
+    : '<p>No bookmarks yet — star a lesson to save it here.</p>';
+  const notes = g.notes || {};
+  const noteKeys = Object.keys(notes).filter(k=>notes[k] && notes[k].trim());
+  document.getElementById('profileNotes').innerHTML = noteKeys.length
+    ? noteKeys.map(k=>`<div class="note-item"><div class="ni-text"><span class="ni-meta">LESSON ${k}</span>${notes[k]}</div><button class="del-btn" onclick="removeNote(${k})">Delete</button></div>`).join('')
+    : '<p>No notes yet — write one from any lesson page.</p>';
+  updateCertificateVisibility();
+}
+function removeBookmark(n){
+  const g = getGamification();
+  g.bookmarks = (g.bookmarks||[]).filter(x=>x!==n);
+  saveGamification(g);
+  renderProfile();
+  if(currentLesson===n) refreshBookmarkStar();
+}
+function removeNote(n){
+  const g = getGamification();
+  if(g.notes) delete g.notes[n];
+  saveGamification(g);
+  renderProfile();
+  if(currentLesson==n) document.getElementById('lessonNotesArea').value = '';
+}
+
+/* ==========================================================
+   CERTIFICATE
+   ========================================================== */
+function certificateEligible(){
+  return completedLessonCount()>=10 && passedQuizCount()>=10;
+}
+function updateCertificateVisibility(){
+  const card = document.getElementById('certificateCard');
+  if(card) card.style.display = certificateEligible() ? 'block' : 'none';
+}
+function renderCertificate(){
+  const name = localStorage.getItem('ictUserName') || 'ICT Learner';
+  document.getElementById('certName').textContent = name;
+  const g = getGamification();
+  if(!g.certDate){ g.certDate = new Date().toISOString(); saveGamification(g); }
+  const d = new Date(g.certDate);
+  document.getElementById('certDate').textContent = 'Completed on ' + d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  const email = localStorage.getItem('ictUserEmail') || '';
+  const idSeed = (name+email+g.certDate).split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+  document.getElementById('certId').textContent = 'Certificate ID: ICT-' + (idSeed*7 % 900000 + 100000);
+}
+
+/* ==========================================================
+   SEARCH
+   ========================================================== */
+const searchIndex = [
+  {tag:'Lesson', title:'Lesson 1: Introduction to Computers & ICT', action:()=>{showPage('lessons'); openLesson(1);}},
+  {tag:'Lesson', title:'Lesson 2: Computer Hardware Basics', action:()=>{showPage('lessons'); openLesson(2);}},
+  {tag:'Lesson', title:'Lesson 3: CPU, RAM & Storage', action:()=>{showPage('lessons'); openLesson(3);}},
+  {tag:'Lesson', title:'Lesson 4: Networking & Internet Basics', action:()=>{showPage('lessons'); openLesson(4);}},
+  {tag:'Lesson', title:'Lesson 5: Wi-Fi & Connectivity', action:()=>{showPage('lessons'); openLesson(5);}},
+  {tag:'Lesson', title:'Lesson 6: Operating Systems & Drivers', action:()=>{showPage('lessons'); openLesson(6);}},
+  {tag:'Lesson', title:'Lesson 7: Mobile Devices', action:()=>{showPage('lessons'); openLesson(7);}},
+  {tag:'Lesson', title:'Lesson 8: Cybersecurity Fundamentals', action:()=>{showPage('lessons'); openLesson(8);}},
+  {tag:'Lesson', title:'Lesson 9: Diagnostic Tools', action:()=>{showPage('lessons'); openLesson(9);}},
+  {tag:'Lesson', title:'Lesson 10: Practical Troubleshooting', action:()=>{showPage('lessons'); openLesson(10);}},
+  {tag:'Practice', title:'Computer troubleshooting guide', action:()=>{showPage('guide'); solveProblem('computer');}},
+  {tag:'Practice', title:'Internet / Wi-Fi troubleshooting guide', action:()=>{showPage('guide'); solveProblem('internet');}},
+  {tag:'Practice', title:'Software troubleshooting guide', action:()=>{showPage('guide'); solveProblem('software');}},
+  {tag:'Practice', title:'Cybersecurity troubleshooting guide', action:()=>{showPage('guide'); solveProblem('security');}},
+  {tag:'Page', title:'CPU / RAM flashcards', action:()=>showPage('flashcards')},
+  {tag:'Page', title:'ICT AI Assistant', action:()=>showPage('ai')},
+  {tag:'Page', title:'Quizzes', action:()=>showPage('quiz')},
+  {tag:'Page', title:'Your Progress dashboard', action:()=>showPage('progress')},
+  {tag:'Page', title:'Student Profile', action:()=>showPage('profile')},
+  {tag:'Topic', title:'Networking', action:()=>{showPage('lessons'); openLesson(4);}},
+  {tag:'Topic', title:'Cybersecurity', action:()=>{showPage('lessons'); openLesson(8);}},
+  {tag:'Topic', title:'Hardware', action:()=>{showPage('lessons'); openLesson(2);}},
+  {tag:'Topic', title:'Software', action:()=>{showPage('lessons'); openLesson(6);}},
+  {tag:'Topic', title:'CPU', action:()=>showPage('flashcards')},
+  {tag:'Topic', title:'RAM', action:()=>showPage('flashcards')}
+];
+function runSearch(query){
+  const box = document.getElementById('searchResults');
+  const q = query.trim().toLowerCase();
+  if(!q){ box.classList.remove('show'); box.innerHTML=''; return; }
+  const matches = searchIndex.filter(item=>item.title.toLowerCase().includes(q) || item.tag.toLowerCase().includes(q)).slice(0,8);
+  box.innerHTML = matches.length
+    ? matches.map((m,i)=>`<div class="sr-item" onclick="runSearchAction(${i})"><span class="sr-tag">${m.tag}</span><span class="sr-title">${m.title}</span></div>`).join('')
+    : '<div class="sr-empty">No matches found.</div>';
+  box.dataset.matches = JSON.stringify(matches.map(m=>searchIndex.indexOf(m)));
+  box.classList.add('show');
+}
+function runSearchAction(i){
+  const indices = JSON.parse(document.getElementById('searchResults').dataset.matches || '[]');
+  const realIdx = indices[i];
+  if(realIdx===undefined) return;
+  searchIndex[realIdx].action();
+  document.getElementById('siteSearch').value='';
+  document.getElementById('searchResults').classList.remove('show');
+}
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.nav-search')) document.getElementById('searchResults').classList.remove('show');
+});
+
+/* ==========================================================
+   VIDEO TUTORIALS — YouTube links injected into each lesson.
+   Defaults are YouTube search links (always valid). The admin
+   can replace them with direct video links; edits are saved in
+   localStorage under "ictTutorials".
+   ========================================================== */
+const ytSearch = q => 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q);
+const DEFAULT_TUTORIALS = {
+  1:[],
+  2:[
+    {title:"How to fix a computer that won't turn on", url:ytSearch("how to fix a computer that won't turn on")},
+    {title:"How to speed up a slow Windows computer", url:ytSearch("how to speed up a slow windows computer")},
+    {title:"How to back up your files in Windows", url:ytSearch("how to back up files windows 11 file history")}
+  ],
+  3:[
+    {title:"How to reseat or install RAM", url:ytSearch("how to reseat install RAM desktop laptop")},
+    {title:"How to clean dust out of a PC safely", url:ytSearch("how to clean dust out of a pc safely compressed air")},
+    {title:"How to fix an overheating laptop", url:ytSearch("how to fix overheating laptop clean fan vents")}
+  ],
+  4:[
+    {title:"How to fix no internet connection (Windows)", url:ytSearch("how to fix no internet connection windows")},
+    {title:"How to fix slow Wi-Fi", url:ytSearch("how to fix slow wifi speed router tips")},
+    {title:"How to restart and reset a router properly", url:ytSearch("how to restart reset router properly")}
+  ],
+  5:[
+    {title:"How to fix an app that won't open (Windows)", url:ytSearch("how to fix app program won't open windows 11")},
+    {title:"How to fix a frozen or crashing program", url:ytSearch("how to fix program freezing crashing windows")},
+    {title:"How to uninstall and reinstall a program", url:ytSearch("how to uninstall and reinstall a program windows")}
+  ],
+  6:[
+    {title:"How to use Windows Startup Repair and Recovery", url:ytSearch("windows 11 startup repair recovery environment tutorial")},
+    {title:"How to repair system files (SFC and DISM)", url:ytSearch("how to repair windows system files sfc scannow dism")},
+    {title:"How to update or reinstall device drivers", url:ytSearch("how to update reinstall device drivers windows")}
+  ],
+  7:[
+    {title:"How to speed up a slow Android phone", url:ytSearch("how to speed up slow android phone")},
+    {title:"How to speed up a slow iPhone", url:ytSearch("how to speed up slow iphone")},
+    {title:"How to improve phone battery life", url:ytSearch("how to improve phone battery life tips")},
+    {title:"How to clear app cache and free up storage", url:ytSearch("how to clear app cache free up storage phone")}
+  ],
+  8:[
+    {title:"How to run a virus scan with Windows Security", url:ytSearch("how to run virus scan windows security defender")},
+    {title:"How to remove malware from a PC", url:ytSearch("how to remove malware from windows pc")},
+    {title:"How to set up two-factor authentication", url:ytSearch("how to set up two factor authentication 2fa")},
+    {title:"How to spot a phishing email", url:ytSearch("how to spot a phishing email")}
+  ],
+  9:[
+    {title:"How to use Task Manager in Windows", url:ytSearch("how to use task manager windows 11 tutorial")},
+    {title:"How to use Device Manager", url:ytSearch("how to use device manager windows tutorial")},
+    {title:"Command Prompt basics: ping and ipconfig", url:ytSearch("command prompt ping ipconfig network troubleshooting tutorial")}
+  ],
+  10:[
+    {title:"How to fix a laptop that can't connect to Wi-Fi", url:ytSearch("how to fix laptop can't connect to wifi")},
+    {title:"How to fix a printer that won't print", url:ytSearch("how to fix printer not printing windows")},
+    {title:"How to fix a program that keeps crashing", url:ytSearch("how to fix program keeps crashing windows")},
+    {title:"How to fix an overheating computer", url:ytSearch("how to fix overheating computer")}
+  ]
+};
+
+function cloneDefaults(){ return JSON.parse(JSON.stringify(DEFAULT_TUTORIALS)); }
+function getTutorials(){
+  try{
+    const t = JSON.parse(localStorage.getItem('ictTutorials'));
+    if(t && typeof t === 'object') return t;
+  }catch(e){}
+  return cloneDefaults();
+}
+function saveTutorials(t){ localStorage.setItem('ictTutorials', JSON.stringify(t)); }
+
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* Accept only YouTube URLs (blocks javascript: and other hosts). Returns clean URL or null. */
+function normalizeYouTubeUrl(raw){
+  let u = String(raw || '').trim();
+  if(!u) return null;
+  if(!/^https?:\/\//i.test(u)) u = 'https://' + u;
+  try{
+    const url = new URL(u);
+    const host = url.hostname.toLowerCase();
+    const ok = ['youtube.com','www.youtube.com','m.youtube.com','youtu.be'];
+    if(!ok.includes(host)) return null;
+    url.protocol = 'https:';
+    return url.href;
+  }catch(e){ return null; }
+}
+function youTubeVideoId(u){
+  try{
+    const url = new URL(u);
+    const host = url.hostname.toLowerCase();
+    let id = null;
+    if(host === 'youtu.be') id = url.pathname.slice(1).split('/')[0];
+    else if(url.pathname === '/watch') id = url.searchParams.get('v');
+    else {
+      const m = url.pathname.match(/^\/(embed|shorts|live)\/([\w-]{11})/);
+      if(m) id = m[2];
+    }
+    return id && /^[\w-]{11}$/.test(id) ? id : null;
+  }catch(e){ return null; }
+}
+
+function renderTutorials(){
+  const t = getTutorials();
+  for(let i=1;i<=10;i++){
+    const lessonEl = document.getElementById('lesson'+i);
+    if(!lessonEl) continue;
+    const old = document.getElementById('tutorial'+i);
+    if(old) old.remove();
+    const list = (t[i] || []).filter(item => normalizeYouTubeUrl(item.url));
+    if(!list.length) continue;
+    const box = document.createElement('div');
+    box.className = 'tutorial-box';
+    box.id = 'tutorial'+i;
+    let html = `<h4>🎬 Video Tutorials — learn by doing</h4>
+      <p class="tut-sub">Follow along on YouTube and practise these steps yourself.</p>`;
+    list.forEach((item, j)=>{
+      const url = normalizeYouTubeUrl(item.url);
+      const vid = youTubeVideoId(url);
+      html += `<div class="tut-item">
+        <div class="tut-row">
+          <a class="tut-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer">
+            <span class="tut-play">▶</span>
+            <span class="tut-title">${esc(item.title)}</span>
+            <span class="tut-kind">${vid ? 'Video' : 'YouTube'}</span>
+          </a>
+          ${vid ? `<button type="button" class="tut-embed-btn" onclick="toggleEmbed(${i},${j},'${vid}')">▶ Play here</button>` : ''}
+        </div>
+        ${vid ? `<div class="tut-embed" id="embed-${i}-${j}"></div>` : ''}
+      </div>`;
+    });
+    box.innerHTML = html;
+    const quizBtn = lessonEl.querySelector(':scope > button.action');
+    if(quizBtn) lessonEl.insertBefore(box, quizBtn);
+    else lessonEl.appendChild(box);
+  }
+}
+
+function toggleEmbed(lesson, idx, vid){
+  const wrap = document.getElementById(`embed-${lesson}-${idx}`);
+  if(!wrap) return;
+  if(wrap.classList.contains('open')){
+    wrap.classList.remove('open');
+    wrap.innerHTML = '';
+    return;
+  }
+  wrap.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="YouTube video player" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <small>If the player doesn't load, use the link above to watch on YouTube.</small>`;
+  wrap.classList.add('open');
+}
+
+/* ==========================================================
+   ADMIN PANEL
+   Front-end only: the password is hashed and kept in this
+   browser's localStorage. It keeps casual users out of the
+   panel, but it is NOT server-side security.
+   ========================================================== */
+function hashStr(s){
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for(let i=0, ch; i<s.length; i++){
+    ch = s.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1>>>16), 2246822507) ^ Math.imul(h2 ^ (h2>>>13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2>>>16), 2246822507) ^ Math.imul(h1 ^ (h1>>>13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1>>>0)).toString(16);
+}
+function pwHash(pw){ return hashStr('ict-hub:' + pw); }
+function currentAdminHash(){ return localStorage.getItem('ictAdminHash') || pwHash('admin123'); }
+function isAdmin(){ return sessionStorage.getItem('ictAdminSession') === '1'; }
+
+function openAdmin(){
+  if(isAdmin()) showPage('admin');
+  else openAdminLogin();
+}
+function openAdminLogin(){
+  document.getElementById('adminModal').classList.add('show');
+  const inp = document.getElementById('adminPass');
+  inp.value = '';
+  document.getElementById('adminLoginErr').textContent = '';
+  setTimeout(()=>inp.focus(), 60);
+}
+function closeAdminLogin(){
+  document.getElementById('adminModal').classList.remove('show');
+}
+function submitAdminLogin(){
+  const v = document.getElementById('adminPass').value;
+  if(pwHash(v) === currentAdminHash()){
+    sessionStorage.setItem('ictAdminSession', '1');
+    closeAdminLogin();
+    showPage('admin');
+    showToast('🛠 Admin unlocked');
+  } else {
+    document.getElementById('adminLoginErr').textContent = 'Incorrect password. Please try again.';
+    document.getElementById('adminPass').select();
+  }
+}
+function adminLogout(){
+  sessionStorage.removeItem('ictAdminSession');
+  showPage('home');
+  showToast('🔒 Admin locked');
+}
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape') closeAdminLogin();
+});
+
+let adminLesson = 1;
+function renderAdmin(){
+  buildAdminPicker();
+  renderAdminTutorials();
+  renderAdminLearner();
+}
+function buildAdminPicker(){
+  let html = '';
+  for(let i=1;i<=10;i++){
+    html += `<button type="button" class="lesson-pill${i===adminLesson?' sel':''}" onclick="selectAdminLesson(${i})">Lesson ${i}</button>`;
+  }
+  document.getElementById('adminLessonPicker').innerHTML = html;
+}
+function selectAdminLesson(n){
+  adminLesson = n;
+  setAdminMsg('adminTutMsg', '');
+  buildAdminPicker();
+  renderAdminTutorials();
+}
+function setAdminMsg(id, text, kind){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = text || '';
+  el.className = 'admin-msg' + (kind ? ' ' + kind : '');
+}
+function renderAdminTutorials(){
+  const list = getTutorials()[adminLesson] || [];
+  document.getElementById('adminLessonTitle').textContent =
+    `Lesson ${adminLesson} — ${list.length} link${list.length === 1 ? '' : 's'}`;
+  const wrap = document.getElementById('adminTutList');
+  if(!list.length){
+    wrap.innerHTML = '<p>No tutorial links for this lesson yet. Add one below.</p>';
+    return;
+  }
+  wrap.innerHTML = list.map((item, j)=>`
+    <div class="admin-row">
+      <input class="admin-input" id="at-title-${j}" type="text" value="${esc(item.title)}" placeholder="Title">
+      <input class="admin-input" id="at-url-${j}" type="text" value="${esc(item.url)}" placeholder="YouTube link">
+      <div class="admin-row-actions">
+        <button type="button" class="action" onclick="adminSaveTutorial(${j})">💾 Save</button>
+        <button type="button" class="action secondary" onclick="adminTestTutorial(${j})">↗ Test Link</button>
+        <button type="button" class="del-btn" onclick="adminDeleteTutorial(${j})">Delete</button>
+      </div>
+    </div>`).join('');
+}
+function adminAddTutorial(){
+  const title = document.getElementById('adminNewTitle').value.trim();
+  const url = normalizeYouTubeUrl(document.getElementById('adminNewUrl').value);
+  if(!title){ setAdminMsg('adminTutMsg', 'Please enter a title.', 'err'); return; }
+  if(!url){ setAdminMsg('adminTutMsg', 'Please enter a valid YouTube link (youtube.com or youtu.be).', 'err'); return; }
+  const t = getTutorials();
+  if(!t[adminLesson]) t[adminLesson] = [];
+  t[adminLesson].push({title, url});
+  saveTutorials(t);
+  document.getElementById('adminNewTitle').value = '';
+  document.getElementById('adminNewUrl').value = '';
+  setAdminMsg('adminTutMsg', '✅ Link added to Lesson ' + adminLesson + '.', 'ok');
+  renderAdminTutorials();
+  renderTutorials();
+}
+function adminSaveTutorial(j){
+  const title = document.getElementById('at-title-'+j).value.trim();
+  const url = normalizeYouTubeUrl(document.getElementById('at-url-'+j).value);
+  if(!title){ setAdminMsg('adminTutMsg', 'Title cannot be empty.', 'err'); return; }
+  if(!url){ setAdminMsg('adminTutMsg', 'That is not a valid YouTube link (youtube.com or youtu.be).', 'err'); return; }
+  const t = getTutorials();
+  if(!t[adminLesson] || !t[adminLesson][j]) return;
+  t[adminLesson][j] = {title, url};
+  saveTutorials(t);
+  setAdminMsg('adminTutMsg', '✅ Saved.', 'ok');
+  renderAdminTutorials();
+  renderTutorials();
+}
+function adminTestTutorial(j){
+  const url = normalizeYouTubeUrl(document.getElementById('at-url-'+j).value);
+  if(!url){ setAdminMsg('adminTutMsg', 'That is not a valid YouTube link.', 'err'); return; }
+  window.open(url, '_blank', 'noopener');
+}
+function adminDeleteTutorial(j){
+  const t = getTutorials();
+  if(!t[adminLesson]) return;
+  t[adminLesson].splice(j, 1);
+  saveTutorials(t);
+  setAdminMsg('adminTutMsg', 'Link removed.', 'ok');
+  renderAdminTutorials();
+  renderTutorials();
+}
+function adminResetTutorials(){
+  if(!confirm('Reset the tutorial links for ALL lessons back to the defaults? Your custom links will be lost.')) return;
+  localStorage.removeItem('ictTutorials');
+  setAdminMsg('adminTutMsg', '↺ All lessons reset to default links.', 'ok');
+  renderAdminTutorials();
+  renderTutorials();
+}
+
+function renderAdminLearner(){
+  const g = getGamification();
+  const name = localStorage.getItem('ictUserName') || '—';
+  const email = localStorage.getItem('ictUserEmail') || '—';
+  const notes = Object.values(g.notes || {}).filter(x=>x && String(x).trim()).length;
+  document.getElementById('adminLearner').innerHTML = `
+    <p>Signed in on this device as <b>${esc(name)}</b> (${esc(email)}).</p>
+    <div class="stat-strip">
+      <div class="stat-chip"><span class="sc-value">${completedLessonCount()}/10</span><span class="sc-label">Lessons Done</span></div>
+      <div class="stat-chip"><span class="sc-value">${passedQuizCount()}/10</span><span class="sc-label">Quizzes Passed</span></div>
+      <div class="stat-chip"><span class="sc-value">${g.xp}</span><span class="sc-label">Total XP</span></div>
+      <div class="stat-chip"><span class="sc-value">${levelFromXP(g.xp)}</span><span class="sc-label">Level</span></div>
+      <div class="stat-chip"><span class="sc-value">${(g.badges||[]).length}</span><span class="sc-label">Badges</span></div>
+      <div class="stat-chip"><span class="sc-value">${notes}</span><span class="sc-label">Notes Written</span></div>
+    </div>
+    <p style="font-size:13px; color:var(--ink-dim);">Learner data lives in each person's own browser, so this view only covers this device.</p>`;
+}
+function adminExport(){
+  const data = {
+    exportedAt: new Date().toISOString(),
+    learner: {name: localStorage.getItem('ictUserName'), email: localStorage.getItem('ictUserEmail')},
+    progress: getProgress(),
+    gamification: getGamification(),
+    tutorials: getTutorials()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const href = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = href;
+  a.download = 'ict-learninghub-data.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(href), 1500);
+  showToast('⬇ Data exported');
+}
+function adminResetProgress(){
+  if(!confirm('Reset ALL learner progress on this device (quiz scores, XP, badges, notes, bookmarks)? This cannot be undone.')) return;
+  localStorage.removeItem('ictProgress');
+  localStorage.removeItem('ictGamify');
+  location.reload();
+}
+function adminChangePassword(){
+  const cur = document.getElementById('adminPwCur').value;
+  const n1 = document.getElementById('adminPwNew').value;
+  const n2 = document.getElementById('adminPwNew2').value;
+  if(pwHash(cur) !== currentAdminHash()){ setAdminMsg('adminPwMsg', 'Current password is incorrect.', 'err'); return; }
+  if(n1.length < 6){ setAdminMsg('adminPwMsg', 'New password must be at least 6 characters.', 'err'); return; }
+  if(n1 !== n2){ setAdminMsg('adminPwMsg', 'New passwords do not match.', 'err'); return; }
+  localStorage.setItem('ictAdminHash', pwHash(n1));
+  ['adminPwCur','adminPwNew','adminPwNew2'].forEach(id=>document.getElementById(id).value = '');
+  setAdminMsg('adminPwMsg', '✅ Password updated.', 'ok');
+}
+
+/* ==========================================================
+   INIT — run gamification + activities + flashcards + profile
+   ========================================================== */
+renderActivities();
+renderTutorials();
+checkStreak();
+checkBadges();
+refreshBookmarkStar();
+document.getElementById('lessonNotesArea').value = getLessonNote(currentLesson);
+if(localStorage.getItem('ictUserName')) document.getElementById('profileNameInput').value = localStorage.getItem('ictUserName');
+lastKnownLevel = levelFromXP(getGamification().xp);
+
+</script>
+</body>
+</html>
